@@ -51,7 +51,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="websocket-sharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\websocket-sharp\websocket-sharp\bin\Release\websocket-sharp.dll</HintPath>
+      <HintPath>bin\Release\websocket-sharp.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
