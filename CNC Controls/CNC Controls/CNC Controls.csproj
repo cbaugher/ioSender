@@ -15,7 +15,7 @@
     <UICulture>en-US</UICulture>
     <ApplicationIcon>App.ico</ApplicationIcon>
     <Localizable>False</Localizable>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
