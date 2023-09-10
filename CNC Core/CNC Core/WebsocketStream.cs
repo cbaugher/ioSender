@@ -40,7 +40,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Text;
 using System.Windows.Threading;
+#if USEWEBSOCKET
 using WebSocketSharp;
+#endif
 
 namespace CNC.Core
 {

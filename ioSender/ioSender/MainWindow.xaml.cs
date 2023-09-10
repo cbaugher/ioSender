@@ -382,6 +382,23 @@ namespace GCode_Sender
             return tab != null;
         }
 
+        private void openConsoleMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (UIViewModel.Console == null)
+            {
+                UIViewModel.Console = new ConsoleWindow();
+                UIViewModel.Console.DataContext = DataContext;
+                UIViewModel.Console.Show();
+            }
+            else
+            {
+                if (UIViewModel.Console.IsVisible)
+                    UIViewModel.Console.Visibility = Visibility.Hidden;
+                else
+                    UIViewModel.Console.Show();
+            }
+        }
+
 #if ADD_CAMERA
         private static bool enableCamera(MainWindow owner)
         {
@@ -400,23 +417,7 @@ namespace GCode_Sender
         {
             UIViewModel.Camera.Open();
         }
-
-        private void openConsoleMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (UIViewModel.Console == null)
-            {
-                UIViewModel.Console = new ConsoleWindow();
-                UIViewModel.Console.DataContext = DataContext;
-                UIViewModel.Console.Show();
-            }
-            else
-            {
-                if (UIViewModel.Console.IsVisible)
-                    UIViewModel.Console.Visibility = Visibility.Hidden;
-                else
-                    UIViewModel.Console.Show();
-            }
-        }
+                
 #else
         private void CameraOpen_Click(object sender, RoutedEventArgs e)
         {

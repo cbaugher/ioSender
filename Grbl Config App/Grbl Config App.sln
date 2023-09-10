@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grbl Config App", "Grbl Config App\Grbl Config App.csproj", "{9266BBFE-CDC2-421E-AECA-C7B948290E72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grbl Config App", "Grbl Config App\Grbl Config App.csproj", "{9266BBFE-CDC2-421E-AECA-C7B948290E72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNC Core", "..\CNC Core\CNC Core\CNC Core.csproj", "{F245FF89-A838-4D6E-AA40-92CFD3D072D3}"
 EndProject
