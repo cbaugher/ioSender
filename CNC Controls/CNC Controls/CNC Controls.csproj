@@ -10,12 +10,16 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>TRACE;DEBUG;USEWEBSOCKET</DefineConstants>
+    <Optimize>False</Optimize>
   </PropertyGroup>
   <PropertyGroup>
     <UICulture>en-US</UICulture>
     <ApplicationIcon>App.ico</ApplicationIcon>
     <Localizable>False</Localizable>
     <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
