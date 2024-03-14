@@ -4618,85 +4618,6 @@
       }
     },
     {
-      "Id": "124",
-      "Name": "IComponentConnector",
-      "Stereotype": "Interface",
-      "CreatedAtUtc": "2024-03-12T06:26:47.8521105Z",
-      "AbsoluteTopLeft": "-1129.1881,-3128.5433",
-      "HeaderContentSize": "301,76.4",
-      "PreferredHeaderSize": "301,76.4",
-      "Tooltip": "interface System.Windows.Markup.IComponentConnector\r\nassembly: System.Xaml, Version=6.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-      "NodeTotalSize": "301,123.4",
-      "ChildrenAreaTopLeft": "1,76.4",
-      "ChildrenAreaSize": "299,46",
-      "IsPinned": true,
-      "Payload": {
-        "Discriminator": "RoslynType",
-        "SymbolName": "IComponentConnector",
-        "FullName": "interface System.Windows.Markup.IComponentConnector",
-        "Symbols": [
-          "{\"K\":\"NamedType\",\"N\":\"IComponentConnector\",\"C\":{\"K\":\"Namespace\",\"N\":\"Markup\",\"C\":{\"K\":\"Namespace\",\"N\":\"Windows\",\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Xaml\",\"V\":\"6.0.2.0\"}}}}}"
-        ],
-        "Description": "Provides markup compile and tools support for named XAML elements and for attaching event handlers to them.",
-        "IsDescriptionVisible": true,
-        "IsAbstract": true,
-        "Accessibility": "Public",
-        "Origin": "Metadata"
-      }
-    },
-    {
-      "Id": "126",
-      "ParentId": "124",
-      "Name": "void Connect(int connectionId, object target)",
-      "Stereotype": "Method",
-      "CreatedAtUtc": "2024-03-12T06:27:09.8747617Z",
-      "AbsoluteTopLeft": "-1128.1881,-3052.1433",
-      "HeaderContentSize": "299,23",
-      "PreferredHeaderSize": "267.0867,23",
-      "Tooltip": "void Connect(int connectionId, object target)",
-      "NodeTotalSize": "299,23",
-      "IsPinned": true,
-      "Payload": {
-        "Discriminator": "Other",
-        "SymbolName": "Connect",
-        "FullName": "void Connect(int connectionId, object target)",
-        "Symbols": [
-          "{\"K\":\"Method\",\"S\":\"Connect(int, object)\",\"C\":{\"K\":\"NamedType\",\"N\":\"IComponentConnector\",\"C\":{\"K\":\"Namespace\",\"N\":\"Markup\",\"C\":{\"K\":\"Namespace\",\"N\":\"Windows\",\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Xaml\",\"V\":\"6.0.2.0\"}}}}}}"
-        ],
-        "Description": "Attaches events and names to compiled content.",
-        "IsDescriptionVisible": true,
-        "IsAbstract": true,
-        "Accessibility": "Public",
-        "Origin": "Metadata"
-      }
-    },
-    {
-      "Id": "127",
-      "ParentId": "124",
-      "Name": "void InitializeComponent()",
-      "Stereotype": "Method",
-      "CreatedAtUtc": "2024-03-12T06:27:10.9607156Z",
-      "AbsoluteTopLeft": "-1128.1881,-3029.1433",
-      "HeaderContentSize": "299,23",
-      "PreferredHeaderSize": "169.5667,23",
-      "Tooltip": "void InitializeComponent()",
-      "NodeTotalSize": "299,23",
-      "IsPinned": true,
-      "Payload": {
-        "Discriminator": "Other",
-        "SymbolName": "InitializeComponent",
-        "FullName": "void InitializeComponent()",
-        "Symbols": [
-          "{\"K\":\"Method\",\"S\":\"InitializeComponent()\",\"C\":{\"K\":\"NamedType\",\"N\":\"IComponentConnector\",\"C\":{\"K\":\"Namespace\",\"N\":\"Markup\",\"C\":{\"K\":\"Namespace\",\"N\":\"Windows\",\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Xaml\",\"V\":\"6.0.2.0\"}}}}}}"
-        ],
-        "Description": "Loads the compiled page of a component.",
-        "IsDescriptionVisible": true,
-        "IsAbstract": true,
-        "Accessibility": "Public",
-        "Origin": "Metadata"
-      }
-    },
-    {
       "Id": "125",
       "Name": "Window",
       "Stereotype": "Class",
@@ -4765,30 +4686,6 @@
         "Description": "Base settings class for client applications.",
         "IsDescriptionVisible": true,
         "IsAbstract": true,
-        "Accessibility": "Public",
-        "Origin": "Metadata"
-      }
-    },
-    {
-      "Id": "135",
-      "Name": "Lazy<AppConfig>",
-      "Stereotype": "Class",
-      "CreatedAtUtc": "2024-03-12T06:34:00.5077504Z",
-      "AbsoluteTopLeft": "-1886.7142,-1779.3479",
-      "HeaderContentSize": "182.56,64.4",
-      "PreferredHeaderSize": "182.56,64.4",
-      "Tooltip": "class System.Lazy<CNC.Controls.AppConfig>\r\nassembly: System.Runtime, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-      "NodeTotalSize": "182.56,64.4",
-      "IsPinned": true,
-      "Payload": {
-        "Discriminator": "RoslynType",
-        "SymbolName": "Lazy",
-        "FullName": "class System.Lazy<CNC.Controls.AppConfig>",
-        "Symbols": [
-          "{\"K\":\"NamedType\",\"N\":\"Lazy\",\"A\":1,\"T\":[{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}],\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Runtime\",\"V\":\"6.0.0.0\"}}}"
-        ],
-        "Description": "Provides support for lazy initialization.",
-        "IsDescriptionVisible": true,
         "Accessibility": "Public",
         "Origin": "Metadata"
       }
@@ -6047,36 +5944,6 @@
       }
     },
     {
-      "Id": "66",
-      "SourceNodeId": "38",
-      "TargetNodeId": "124",
-      "Stereotype": "Implementation",
-      "Payload": {
-        "Discriminator": "Other",
-        "Relationship": "{\"K\":\"NamedType\",\"N\":\"AppConfigView\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}|Implementation|{\"K\":\"NamedType\",\"N\":\"IComponentConnector\",\"C\":{\"K\":\"Namespace\",\"N\":\"Markup\",\"C\":{\"K\":\"Namespace\",\"N\":\"Windows\",\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Xaml\",\"V\":\"6.0.2.0\"}}}}}"
-      }
-    },
-    {
-      "Id": "67",
-      "SourceNodeId": "41",
-      "TargetNodeId": "124",
-      "Stereotype": "Implementation",
-      "Payload": {
-        "Discriminator": "Other",
-        "Relationship": "{\"K\":\"NamedType\",\"N\":\"GrblConfigView\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}|Implementation|{\"K\":\"NamedType\",\"N\":\"IComponentConnector\",\"C\":{\"K\":\"Namespace\",\"N\":\"Markup\",\"C\":{\"K\":\"Namespace\",\"N\":\"Windows\",\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Xaml\",\"V\":\"6.0.2.0\"}}}}}"
-      }
-    },
-    {
-      "Id": "68",
-      "SourceNodeId": "93",
-      "TargetNodeId": "124",
-      "Stereotype": "Implementation",
-      "Payload": {
-        "Discriminator": "Other",
-        "Relationship": "{\"K\":\"NamedType\",\"N\":\"MainWindow\",\"C\":{\"K\":\"Namespace\",\"N\":\"Grbl_Config_App\",\"C\":{\"K\":\"Assembly\",\"N\":\"Grbl Config App\",\"V\":\"0.0.0.0\"}}}|Implementation|{\"K\":\"NamedType\",\"N\":\"IComponentConnector\",\"C\":{\"K\":\"Namespace\",\"N\":\"Markup\",\"C\":{\"K\":\"Namespace\",\"N\":\"Windows\",\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Xaml\",\"V\":\"6.0.2.0\"}}}}}"
-      }
-    },
-    {
       "Id": "69",
       "SourceNodeId": "93",
       "TargetNodeId": "125",
@@ -6114,54 +5981,6 @@
       "Payload": {
         "Discriminator": "Other",
         "Relationship": "{\"K\":\"NamedType\",\"N\":\"Settings\",\"C\":{\"K\":\"Namespace\",\"N\":\"Properties\",\"C\":{\"K\":\"Namespace\",\"N\":\"Grbl_Config_App\",\"C\":{\"K\":\"Assembly\",\"N\":\"Grbl Config App\",\"V\":\"0.0.0.0\"}}}}|Inheritance|{\"K\":\"NamedType\",\"N\":\"ApplicationSettingsBase\",\"C\":{\"K\":\"Namespace\",\"N\":\"Configuration\",\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Configuration.ConfigurationManager\",\"V\":\"6.0.0.0\"}}}}"
-      }
-    },
-    {
-      "Id": "73",
-      "SourceNodeId": "37",
-      "TargetNodeId": "135",
-      "Stereotype": "Association",
-      "Payload": {
-        "Discriminator": "Association",
-        "Relationship": "{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}|Association|{\"K\":\"NamedType\",\"N\":\"Lazy\",\"A\":1,\"T\":[{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}],\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Runtime\",\"V\":\"6.0.0.0\"}}}",
-        "TargetLabels": [
-          {
-            "Label": {
-              "Text2": "settings",
-              "Tooltip": "private static readonly Lazy<AppConfig> settings"
-            },
-            "Symbol": "{\"K\":\"Field\",\"N\":\"settings\",\"C\":{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}}"
-          }
-        ]
-      }
-    },
-    {
-      "Id": "74",
-      "SourceNodeId": "135",
-      "TargetNodeId": "37",
-      "Stereotype": "GenericTypeArgument",
-      "Payload": {
-        "Discriminator": "Other",
-        "Relationship": "{\"K\":\"NamedType\",\"N\":\"Lazy\",\"A\":1,\"T\":[{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}],\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Runtime\",\"V\":\"6.0.0.0\"}}}|GenericTypeArgument|{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}"
-      }
-    },
-    {
-      "Id": "75",
-      "SourceNodeId": "135",
-      "TargetNodeId": "37",
-      "Stereotype": "Association",
-      "Payload": {
-        "Discriminator": "Association",
-        "Relationship": "{\"K\":\"NamedType\",\"N\":\"Lazy\",\"A\":1,\"T\":[{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}],\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Runtime\",\"V\":\"6.0.0.0\"}}}|Association|{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}",
-        "TargetLabels": [
-          {
-            "Label": {
-              "Text2": "Value",
-              "Tooltip": "public AppConfig Value { get; }"
-            },
-            "Symbol": "{\"K\":\"Property\",\"N\":\"Value\",\"C\":{\"K\":\"NamedType\",\"N\":\"Lazy\",\"A\":1,\"T\":[{\"K\":\"NamedType\",\"N\":\"AppConfig\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}],\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Runtime\",\"V\":\"6.0.0.0\"}}}}"
-          }
-        ]
       }
     },
     {
@@ -6613,16 +6432,6 @@
             "Symbol": "{\"K\":\"Property\",\"N\":\"Console\",\"C\":{\"K\":\"NamedType\",\"N\":\"UIViewModel\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}}"
           }
         ]
-      }
-    },
-    {
-      "Id": "102",
-      "SourceNodeId": "144",
-      "TargetNodeId": "124",
-      "Stereotype": "Implementation",
-      "Payload": {
-        "Discriminator": "Other",
-        "Relationship": "{\"K\":\"NamedType\",\"N\":\"ConsoleWindow\",\"C\":{\"K\":\"Namespace\",\"N\":\"Controls\",\"C\":{\"K\":\"Namespace\",\"N\":\"CNC\",\"C\":{\"K\":\"Assembly\",\"N\":\"CNC.Controls.WPF\",\"V\":\"0.0.0.0\"}}}}|Implementation|{\"K\":\"NamedType\",\"N\":\"IComponentConnector\",\"C\":{\"K\":\"Namespace\",\"N\":\"Markup\",\"C\":{\"K\":\"Namespace\",\"N\":\"Windows\",\"C\":{\"K\":\"Namespace\",\"N\":\"System\",\"C\":{\"K\":\"Assembly\",\"N\":\"System.Xaml\",\"V\":\"6.0.2.0\"}}}}}"
       }
     },
     {

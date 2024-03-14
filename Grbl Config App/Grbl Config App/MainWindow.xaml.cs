@@ -38,14 +38,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-using System;
-using System.Windows;
-using CNC.Core;
 using CNC.Controls;
-using System.Collections.Generic;
-using System.Threading;
-using System.IO;
+using CNC.Core;
 using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Windows;
 
 namespace Grbl_Config_App
 {
@@ -94,7 +94,7 @@ namespace Grbl_Config_App
 
             using (new UIUtils.WaitCursor()) // disconnecting from websocket may take some time...
             {
-               Comms.com.Close();
+                Comms.com.Close();
             }
         }
 
@@ -118,7 +118,7 @@ namespace Grbl_Config_App
 
             var g = new Settings();
 
-            if(g.Load(DataContext as GrblViewModel, "$ESH"))
+            if (g.Load(DataContext as GrblViewModel, "$ESH"))
             {
                 SaveFileDialog saveDialog = new SaveFileDialog()
                 {
@@ -214,18 +214,19 @@ namespace Grbl_Config_App
 
             model.Silent = true;
 
-                new Thread(() =>
-                {
-                    res = WaitFor.AckResponse<string>(
-                        cancellationToken,
-                        response => ProcessDetail(response),
-                        a => model.OnResponseReceived += a,
-                        a => model.OnResponseReceived -= a,
-                        400, () => Comms.com.WriteCommand(cmd));
-                }).Start();
+            new Thread(() =>
+            {
+                res = WaitFor.AckResponse<string>(
+                    cancellationToken,
+                    //response => ProcessDetail(response),
+                    response => { if(response != "ok") settings.Add(response); },
+                    a => model.OnResponseReceived += a,
+                    a => model.OnResponseReceived -= a,
+                    400, () => Comms.com.WriteCommand(cmd));
+            }).Start();
 
-                while (res == null)
-                    EventUtils.DoEvents();
+            while (res == null)
+                EventUtils.DoEvents();
 
             return settings.Count > 0;
         }
@@ -233,27 +234,20 @@ namespace Grbl_Config_App
         public void Backup(string filename)
         {
             if (settings.Count > 0) try
-            {
-                StreamWriter file = new StreamWriter(filename);
-                if (file != null)
                 {
-                    foreach (string s in settings)
-                        file.WriteLine(s);
+                    StreamWriter file = new StreamWriter(filename);
+                    if (file != null)
+                    {
+                        foreach (string s in settings)
+                            file.WriteLine(s);
 
-                    file.Close();
+                        file.Close();
+                    }
                 }
-            }
-            catch
-            {
-            }
+                catch
+                {
+                }
         }
 
-        private void ProcessDetail(string data)
-        {
-            if (data != "ok")
-            {
-                settings.Add(data);
-            }
-        }
     }
 }
