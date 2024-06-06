@@ -9,10 +9,9 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Globalization;
-using System.Windows.Markup;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows;
+using Avalonia.Controls;
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Collections.Concurrent;
@@ -20,42 +19,70 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using CNC.GCode;
 using System.IO;
+using Avalonia.Markup.Xaml.Styling;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Avalonia;
+//using MsBox.Avalonia;
+
 
 namespace CNC.Core
 {
-    public class LibStrings
+    public static class LibStrings
     {
-        static ResourceDictionary resource = new ResourceDictionary();
+        private static readonly ResourceDictionary Resource;
+        //static ResourceInclude resInclude = new ResourceInclude(new Uri("pack://application:,,,/CNC.Core;Component/LibStrings.axaml", UriKind.Absolute));
+        
+        static LibStrings()
+        {
+            Resource = new ResourceDictionary();
+            try
+            {
+                var uri = new Uri("avares://CNC.Core/LibStrings.axaml");
+                var include = new ResourceInclude(uri)
+                {
+                    Source = uri
+                };
+                Resource.MergedDictionaries.Add(include);
+            }
+            catch { }
+        }
 
         public static string FindResource(string key)
         {
-            if (resource.Source == null)
-                try
-                {
-                    resource.Source = new Uri("pack://application:,,,/CNC.Core;Component/LibStrings.xaml", UriKind.Absolute);
-                }
-                catch
-                {
-                }
+            // Original code
+            //resource.TryGetValue(key, out object? value);
+            //return (value as string) ?? string.Empty;
 
-            return resource.Source == null || !resource.Contains(key) ? string.Empty : (string)resource[key];
+            if (Resource.TryGetValue(key, out var val1))
+                return val1 as string;
+
+            foreach (var dict in Resource.MergedDictionaries)
+            {
+                if (dict.TryGetResource(key, Application.Current.ActualThemeVariant, out var val2))
+                    return val2 as string;
+            }
+            return string.Empty;
         }
     }
-    public class ViewModelBase : INotifyPropertyChanged, INotifyDataErrorInfo
+
+
+
+    //public class ViewModelBase : INotifyPropertyChanged, INotifyDataErrorInfo
+    public class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     {
         private readonly Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
-        public event PropertyChangedEventHandler PropertyChanged;
+//        public event PropertyChangedEventHandler PropertyChanged;
 
-        //protected void OnPropertyChanged(string propertyName)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
+        //ORIG protected void OnPropertyChanged(string propertyName)
+        //ORIG {
+        //ORIG     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //ORIG }
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+ //       protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+ //       {
+ //           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+ //       }
 
         #region INotifyDataErrorInfo members
 
@@ -163,9 +190,13 @@ namespace CNC.Core
     }
 
     // by Nick : https://stackoverflow.com/questions/326802/how-can-you-two-way-bind-a-checkbox-to-an-individual-bit-of-a-flags-enumeration
-    public class EnumFlags<T> : ViewModelBase where T : struct, IComparable, IFormattable, IConvertible
+    public partial class EnumFlags<T> : ViewModelBase where T : struct, IComparable, IFormattable, IConvertible
     {
+        [ObservableProperty]
         private T value;
+
+//        [ObservableProperty]
+//        private T _val;
 
         private int Foo<TEnum>(TEnum value) where TEnum : struct  // C# does not allow enum constraint
         {
@@ -178,17 +209,23 @@ namespace CNC.Core
             value = t;
         }
 
-        public T Value
+        //public T Value
+        //{
+        //    get { return value; }
+        //    set
+        //    {
+        //        if (!this.value.Equals(value))
+        //        {
+        //            this.value = value;
+        //            OnPropertyChanged("Item[]");
+        //        }
+        //    }
+        //}
+
+        public int IntValue
         {
-            get { return value; }
-            set
-            {
-                if (!this.value.Equals(value))
-                {
-                    this.value = value;
-                    OnPropertyChanged("Item[]");
-                }
-            }
+//            get { return (int)(ValueType)value; }
+            get { return (int)(ValueType)Value; }
         }
 
         [IndexerName("Item")]
@@ -198,15 +235,18 @@ namespace CNC.Core
             {
                 // .net does not allow us to specify that T is an enum, so it thinks we can't cast T to int.
                 // to get around this, cast it to object then cast that to int.
-                return (((int)(object)value & (int)(object)key) == (int)(object)key);
+                //                return (((int)(object)value & (int)(object)key) == (int)(object)key);
+                return (((int)(object)Value & (int)(object)key) == (int)(object)key);
             }
             set
             {
-                if ((((int)(object)this.value & (int)(object)key) == (int)(object)key) == value) return;
+                //                if ((((int)(object)this.value & (int)(object)key) == (int)(object)key) == value) return;
+                if ((((int)(object)this.Value & (int)(object)key) == (int)(object)key) == value) return;
 
-                this.value = (T)(object)((int)(object)this.value ^ (int)(object)key);
+                //                this.value = (T)(object)((int)(object)this.value ^ (int)(object)key);
+                this.Value = (T)(object)((int)(object)this.Value ^ (int)(object)key);
 
-                OnPropertyChanged("Item[]");
+                //OnPropertyChanged("Item[]");
             }
         }
     }
@@ -256,6 +296,7 @@ namespace CNC.Core
         }
     }
 
+    /*
     [ContentProperty("Parameters")]
     public class PathConstructor : MarkupExtension
     {
@@ -279,6 +320,7 @@ namespace CNC.Core
             return new PropertyPath(String.Format("{0}[{1}]", Path, StringEnumConversion.ConvertToEnum<SpindleState>(Parameters[0])));
         }
     }
+    */
 
     public class Copy
     {
@@ -364,4 +406,6 @@ namespace CNC.Core
             return tcs.Task;
         }
     }
+           
+
 }

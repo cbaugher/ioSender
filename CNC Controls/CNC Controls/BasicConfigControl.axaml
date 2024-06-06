@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="CNC.Controls.BasicConfigControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+             xmlns:ctrl="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 mc:Ignorable="d" d:DesignHeight="210" d:DesignWidth="310"
+			 x:DataType="local:Config">
+	
+    <ctrl:GroupBox x:Name="grpBasic" Header="Main" HorizontalAlignment="Left" VerticalAlignment="Top" Theme="{StaticResource GroupBoxClassic}">
+        <StackPanel HorizontalAlignment="Left">
+            <!--<Grid x:Name="grid" ColumnDefinitions="160,Auto">
+                <Label x:Name="lblTheme" Content="Theme:" Grid.Column="0" HorizontalContentAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center"
+					   Height="26"/>-->
+                <!--<ComboBox Grid.Column="1" IsEnabled="False" ItemsSource="{Binding Path=Themes}" DisplayMemberBinding="Value" SelectedValueBinding="Key"
+						  SelectedValue="{Binding Path=Theme, Mode=TwoWay}" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Center" Width="80"/>-->
+            <!--</Grid>-->
+			<StackPanel Orientation="Horizontal">
+				<Label Content="Reset delay:" VerticalContentAlignment="Center"/>
+				<NumericUpDown ShowButtonSpinner="False" FormatString="###0" Value="{Binding ResetDelay, Mode=TwoWay}" Height="29"
+								VerticalAlignment="Bottom" ToolTip.Tip="Delay to allow controller to finish booting before communication starts."/>
+				<Label Content="ms" VerticalContentAlignment="Center"/>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label Content="Poll interval:" VerticalContentAlignment="Center"/>
+				<NumericUpDown ShowButtonSpinner="False" FormatString="###0" Value="{Binding PollInterval, Mode=TwoWay}" Height="29" VerticalAlignment="Bottom"
+							   ToolTip.Tip="Time between status request sent to controller."/>
+				<Label Content="ms" VerticalContentAlignment="Center"/>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label Content="Max buffer:" VerticalContentAlignment="Center"/>
+				<NumericUpDown ShowButtonSpinner="False" FormatString="###0" Value="{Binding MaxBufferSize, Mode=TwoWay}" Height="29" VerticalAlignment="Bottom"
+							   ToolTip.Tip="Maximum serial buffer size utilized (limited to 90% of reported value)."/>
+ 			   <Label Content="bytes" VerticalContentAlignment="Center"/>
+			</StackPanel>
+			
+            <CheckBox Content="Agressive buffering" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="5,0,0,0"
+					  IsChecked="{Binding UseBuffering, Mode=TwoWay}"
+					  ToolTip.Tip="Buffers more than one GCode block in controller for smoother execution. For grblHAL only!"/>
+            <CheckBox Content="Keep MDI focus" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="5,0,0,0"
+					  IsChecked="{Binding KeepMdiFocus, Mode=TwoWay}" ToolTip.Tip="Buffers more than one GCode block in controller for smoother execution. For grblHAL only!"/>
+            <CheckBox Content='Filter "ok" response' HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="5,0,0,0"
+					  IsChecked="{Binding FilterOkResponse, Mode=TwoWay}" ToolTip.Tip="Enable if ok responses overwhelm console logging, typically happens when sending lots of short commands."/>
+            <CheckBox Content='Auto-compress gcode on transforms' HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="5,0,0,0"
+					  IsChecked="{Binding AutoCompress, Mode=TwoWay}" ToolTip.Tip="Removes superfluous gcode command elements."/>
+            <CheckBox Content='Restore last window size on startup' HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="5,0,0,0"
+					  IsChecked="{Binding KeepWindowSize, Mode=TwoWay}" ToolTip.Tip="Restore window size on next startup."/>
+        </StackPanel>
+    </ctrl:GroupBox>
+	
+</UserControl>

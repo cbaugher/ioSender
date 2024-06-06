@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="CNC.Controls.DROControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:gcode="clr-namespace:CNC.GCode;assembly=CNC.Core"
+             xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 mc:Ignorable="d"
+             Loaded="DRO_Loaded"
+             xmlns:gb="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 x:DataType="cnccore:GrblViewModel">
+	
+	<!--<Design.PreviewWith>
+		<local:DROControl></local:DROControl>
+	</Design.PreviewWith>-->
+	
+    <UserControl.Resources>
+        <ResourceDictionary>
+			<local:LatheModeToStringConverter x:Key="LatheModeConverter" />
+			<local:LogicalNotConverter x:Key="BooleanConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+	<UserControl.Styles>
+		<StyleInclude Source="avares://CNC.Controls/Resources/SharedStyles.axaml"/>
+	</UserControl.Styles>
+	
+    
+	<gb:GroupBox x:Name="grpDRO" Header="DRO" HorizontalAlignment="Center" VerticalAlignment="Top" Width="" Theme="{StaticResource GroupBoxClassic}">
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,5,0,5">
+            <Label x:Name="lblXMode" Content="{Binding Path=LatheMode, Mode=OneWay, Converter={StaticResource LatheModeConverter}}"
+				   IsVisible="{Binding LatheModeEnabled, Mode=OneWay}" Height="25" HorizontalContentAlignment="Right" Margin="20,0,65,0"/>
+            <!--<local:DROBaseControl x:Name="axisX" Label="X" Value="{Binding Position.X, Mode=TwoWay}" IsScaled="{Binding AxisScaled[X], Mode=OneWay}"/>-->
+			<!--<NumericUpDown ShowButtonSpinner="False" Value="{Binding Position.X}"/>-->
+			<local:DROBaseControl x:Name="axisX" Label="X" Value="{Binding Position.X, Mode=TwoWay}" IsScaled="{Binding AxisScaled[X], Mode=OneWay}"
+									 ToolTip.Tip="{Binding Position.X}"/>
+			<local:DROBaseControl x:Name="axisY" Label="Y" Value="{Binding Position.Y, Mode=TwoWay}" IsScaled="{Binding AxisScaled[Y], Mode=OneWay}"
+								  Classes="YAxisVisibleStyle" ToolTip.Tip="{Binding Position.Y}"/>
+			<local:DROBaseControl x:Name="axisZ" Label="Z" Value="{Binding Position.Z, Mode=TwoWay}" IsScaled="{Binding AxisScaled[Z], Mode=OneWay}"
+								  Classes="ZAxisVisibleStyle"/>
+		    <!--FIXME:  ENABLING ABC AXES CAUSES NULL EXCEPTIONS IN AXIS TO INDEX CONVERSION-->
+			<!--<local:DROBaseControl x:Name="axisA" Label="{Binding Path=AxisLetter.A, Mode=OneWay}" Value="{Binding Path=Position.A, Mode=TwoWay}" IsScaled="{Binding Path=AxisScaled[A], Mode=OneWay}"/>-->
+            <!--<local:DROBaseControl x:Name="axisB" Label="{Binding Path=AxisLetter.B, Mode=OneWay}" Value="{Binding Path=Position.B, Mode=TwoWay}" IsScaled="{Binding Path=AxisScaled[B], Mode=OneWay}"/>
+            <local:DROBaseControl x:Name="axisC" Label="{Binding Path=AxisLetter.C, Mode=OneWay}" Value="{Binding Path=Position.C, Mode=TwoWay}" IsScaled="{Binding Path=AxisScaled[C], Mode=OneWay}"/>-->
+            <local:DROBaseControl x:Name="axisU" Label="U" Value="{Binding Position.U, Mode=TwoWay}" IsScaled="{Binding AxisScaled[U], Mode=OneWay}"
+								  Classes="UAxisVisibleStyle"/>
+            <local:DROBaseControl x:Name="axisV" Label="V" Value="{Binding Position.V, Mode=TwoWay}" IsScaled="{Binding AxisScaled[V], Mode=OneWay}"
+								  Classes="VAxisVisibleStyle"/>
+            <local:DROBaseControl x:Name="axisW" Label="W" Value="{Binding Position.W, Mode=TwoWay}" IsScaled="{Binding AxisScaled[W], Mode=OneWay}"
+								  Classes="WAxisVisibleStyle"/>
+            <Button x:Name="btnZeroAll" Content="Zero all" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}"
+					Focusable="False" Height="28" Width="180" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="2,3" Click="btnZeroAll_Click"/>
+        </StackPanel>
+    </gb:GroupBox>
+</UserControl>

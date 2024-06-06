@@ -37,14 +37,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+#if USEELTIMA
 using System;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using System.IO.Ports;
-using System.Windows.Threading;
+//using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Threading;
 using System.IO;
 using System.Collections.ObjectModel;
+#endif
 
 namespace CNC.Core
 {
@@ -78,7 +82,7 @@ namespace CNC.Core
 
             if (parameter.Count() < 4)
             {
-                MessageBox.Show("Unable to open serial port: " + PortParams, "ioSender");
+                //MessageBox.Show("Unable to open serial port: " + PortParams, "ioSender");
                 System.Environment.Exit(2);
             }
 
@@ -88,7 +92,7 @@ namespace CNC.Core
             }
             catch
             {
-                MessageBox.Show("Failed to load serial port driver.", "ioSender");
+                //MessageBox.Show("Failed to load serial port driver.", "ioSender");
                 System.Environment.Exit(1);
             }
 
@@ -334,7 +338,8 @@ namespace CNC.Core
                         }
 #endif
                         if (Reply.Length != 0 && DataReceived != null)
-                            Dispatcher.BeginInvoke(DataReceived, Reply);
+                            //Dispatcher.BeginInvoke(DataReceived, Reply);
+                            Dispatcher.Post(()=>DataReceived(Reply));
 
                         state = Reply == "ok" ? Comms.State.ACK : (Reply.StartsWith("error") ? Comms.State.NAK : Comms.State.DataReceived);
                     }

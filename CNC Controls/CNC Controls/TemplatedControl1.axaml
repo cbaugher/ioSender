@@ -1,0 +1,33 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:CNC.Controls"
+		x:DataType="controls:TemplatedControl1">
+	
+  <Design.PreviewWith>
+    <controls:TemplatedControl1 Value="27"/>
+  </Design.PreviewWith>
+
+  <Style Selector="controls|TemplatedControl1">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <!--<TextBlock Text="Templated Control" />-->
+		  <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="40" Width="190">
+			  <Label x:Name="lblAxis" Content="{TemplateBinding Label}"
+					 HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="3,0,3,0" Width="30" FontSize="20"/>
+			  <!--<NumericUpDown x:Name="txtReadout" Value="{TemplateBinding Value, Mode=TwoWay}"
+							 IsReadOnly="True" Background="#FFF8F8F8" Height="29" Width="103" TextAlignment="Right"
+							 FontSize="20" ShowButtonSpinner="False" FormatString="{Binding FormatSigned}"/>-->
+			  <NumericUpDown x:Name="txtReadout" Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+							 IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Background="#FFF8F8F8" Height="30" Width="103"
+							 TextAlignment="Right" FontSize="18" ShowButtonSpinner="False" FormatString="" />
+			  <!--<Button x:Name="btnZero" Content="0" IsEnabled="{Binding !IsJobRunning}" Focusable="False" Margin="3,0,3,0"
+					  Height="29" Width="29"/>-->
+			  <Button x:Name="btnZero" Content="0" Focusable="False" Margin="3,0,3,0" Height="29" Width="29"/>
+			  <Button x:Name="btnScaled" Height="29" Focusable="False" Width="10" />
+		  </StackPanel>
+		  
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

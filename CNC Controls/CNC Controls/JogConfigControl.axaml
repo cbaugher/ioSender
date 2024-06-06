@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="CNC.Controls.JogConfigControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+             mc:Ignorable="d" d:DesignHeight="350" d:DesignWidth="350"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+             xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 x:DataType="local:JogConfigControl">
+	
+    <UserControl.Resources>
+        <!--<local:BoolToVisibleConverter x:Key="IsVisibleConverter" />-->
+        <local:LogicalNotConverter x:Key="BooleanNotConverter" />
+    </UserControl.Resources>
+
+	<UserControl.Styles>
+		<Style Selector="Label">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="6,3,0,3"/>
+		</Style>
+		<Style Selector="Label.unit">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="80,0,0,0"/>
+		</Style>
+		<Style Selector="NumericUpDown">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="0,3,6,3"/>
+			<Setter Property="Width" Value="80"/>
+			<Setter Property="ShowButtonSpinner" Value="False"/>
+		</Style>
+		<Style Selector="CheckBox">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,3,6,3"/>
+		</Style>
+	</UserControl.Styles>
+
+
+	<gb:GroupBox x:Name="grpJog" Header="Keyboard jogging" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Theme="{StaticResource GroupBoxClassic}">
+		<Grid HorizontalAlignment="Left" VerticalAlignment="Top" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+			  ColumnDefinitions="*,6,Auto" Width="" ToolTip.Tip="Warning! - Grbl has outstanding bug(s) in jog cancel (on key up)."
+			  ShowGridLines="True" Background="Red">
+			<TextBlock TextWrapping="Wrap">NEED BINDING/VALIDATION</TextBlock>
+			<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3">
+				<CheckBox Content="Enable" IsChecked="{Binding}" Grid.Row="0" Grid.Column="2"/>
+				<Image HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"
+					   Source="avares://IOSender/Assets/StatusAnnotations_Warning_16xLG_color.png"/>
+			</StackPanel>
+			<Label Target="fastFeedrate" Grid.Row="1" Grid.Column="0">Fast feedrate:</Label>
+			<Label Target="fastFeedrate" Grid.Row="1" Grid.Column="2" Classes="unit">mm/min</Label>
+			<NumericUpDown Name="fastFeedrate" Grid.Row="1" Grid.Column="2" Text="{Binding}"></NumericUpDown>
+			<Label Target="fastDistance" Grid.Row="2" Grid.Column="0">Fast distance:</Label>
+			<Label Target="fastDistance" Grid.Row="2" Grid.Column="2" Classes="unit">mm</Label>
+			<NumericUpDown Name="fastDistance" Grid.Row="2" Grid.Column="2" Text="{Binding}"></NumericUpDown>
+			<Label Target="slowFeedrate" Grid.Row="3" Grid.Column="0">Slow feedrate:</Label>
+			<Label Target="slowFeedrate" Grid.Row="3" Grid.Column="2" Classes="unit">mm/min</Label>
+			<NumericUpDown Name="slowFeedrate" Grid.Row="3" Grid.Column="2" Text="{Binding}"></NumericUpDown>
+			<Label Target="slowDistance" Grid.Row="4" Grid.Column="0">Slow distance:</Label>
+			<Label Target="slowDistance" Grid.Row="4" Grid.Column="2" Classes="unit">mm</Label>
+			<NumericUpDown Name="slowDistance" Grid.Row="4" Grid.Column="2" Text="{Binding}"></NumericUpDown>
+			<Label Target="stepFeedrate" Grid.Row="5" Grid.Column="0">Step feedrate:</Label>
+			<Label Target="stepFeedrate" Grid.Row="5" Grid.Column="2" Classes="unit">mm/min</Label>
+			<NumericUpDown Name="stepFeedrate" Grid.Row="5" Grid.Column="2" Text="{Binding}"></NumericUpDown>
+			<Label Target="linkStepToUi" Grid.Row="6" Grid.Column="2">Link step distance to UI jogging</Label>
+			<CheckBox Name="linkStepToUi" Grid.Row="6" Grid.Column="0" IsChecked="{Binding}" HorizontalAlignment="Right"/>
+			<Label Target="stepDistance" Grid.Row="7" Grid.Column="0">Step distance:</Label>
+			<Label Target="stepDistance" Grid.Row="7" Grid.Column="2" Classes="unit">mm</Label>
+			<NumericUpDown Name="stepDistance" Grid.Row="7" Grid.Column="2" Text="{Binding}"></NumericUpDown>
+
+			<GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="3" >
+			</GridSplitter>
+		</Grid>
+	</gb:GroupBox>
+	
+	
+	<!--<GroupBox x:Uid="grp_kbdJogging" x:Name="grpJog" Header="Keyboard jogging" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="310">
+		<StackPanel HorizontalAlignment="Left" Height="Auto" Margin="0,3,0,0" VerticalAlignment="Top">
+			<StackPanel x:Uid="pnl_kbdJogging" Orientation="Horizontal" Visibility="{Binding Path=IsGrbl, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource IsVisibleConverter}}" ToolTip="Warning! - Grbl has outstanding bug(s) in jog cancel (on key up).">
+				<CheckBox x:Uid="lbl_enable" Content="Enable" IsChecked="{Binding Path=Jog.KeyboardEnable, Mode=TwoWay}" Margin="160,3,0,3"/>
+				<Image HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Source="Resources/StatusAnnotations_Warning_16xLG_color.png"/>
+			</StackPanel>
+			<local:NumericField x:Uid="fld_fastFeedrate" Label="Fast feedrate:" Localization.Attributes = "$Content (Inherit)" ColonAt="160" Unit="mm/min" Format="###0" Value="{Binding Path=Jog.FastFeedrate, Mode=TwoWay}"/>
+			<local:NumericField x:Uid="fld_fastDistance" Label="Fast distance:" ColonAt="160" Value="{Binding Path=Jog.FastDistance, Mode=TwoWay}" />
+			<local:NumericField x:Uid="fld_slowFeedrate" Label="Slow feedrate:" ColonAt="160" Unit="mm/min" Format="###0" Value="{Binding Path=Jog.SlowFeedrate, Mode=TwoWay}"/>
+			<local:NumericField x:Uid="fld_slowDistance" Label="Slow distance:" ColonAt="160" Value="{Binding Path=Jog.SlowDistance, Mode=TwoWay}" />
+			<local:NumericField x:Uid="fld_stepFeedrate" Label="Step feedrate:" ColonAt="160" Unit="mm/min" Format="###0" Value="{Binding Path=Jog.StepFeedrate, Mode=TwoWay}"/>
+			<CheckBox x:Uid="lbl_linkStepToUi" Content="Link step distance to UI jogging" IsChecked="{Binding Path=Jog.LinkStepJogToUI, Mode=TwoWay}" Margin="50,3,0,3"/>
+			<local:NumericField x:Uid="fld_stepDistance" Label="Step distance:" ColonAt="160" Value="{Binding Path=Jog.StepDistance, Mode=TwoWay}" IsEnabled="{Binding Path=Jog.LinkStepJogToUI, Converter={StaticResource BooleanNotConverter}}" />
+		</StackPanel>
+	</GroupBox>-->
+
+</UserControl>

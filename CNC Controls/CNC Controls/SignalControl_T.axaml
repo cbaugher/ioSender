@@ -1,0 +1,33 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:CNC.Controls"
+		x:DataType="controls:SignalControl_T">
+	
+	<Design.PreviewWith>
+		<controls:SignalControl_T Label="X" IsSet="True"/>
+	</Design.PreviewWith>
+
+	<Style Selector="controls|SignalControl_T">
+		<!-- Set Defaults -->
+		<Setter Property="Template">
+			<ControlTemplate>
+				<StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+					<Button x:Name="btnLED" Focusable="False" HorizontalAlignment="Center" Margin="0,3,0,0" VerticalAlignment="Top" Width="10" Height="10"
+						Classes.set="{TemplateBinding IsSet}" Background="Transparent">
+						<!--Classes.unset="{TemplateBinding !IsSet}">-->
+						<Button.Styles>
+							<Style Selector="Button.set">
+								<Setter Property="Background" Value="Red"/>
+							</Style>
+							<!--<Style Selector="Button.unset">
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>-->
+						</Button.Styles>
+					</Button>
+					<TextBlock x:Name="btnLabel" Text="{TemplateBinding Label}" HorizontalAlignment="Stretch" FontSize="12" FontFamily="Global User Interface"
+							   Margin="3,0,3,2" Width=""/>
+				</StackPanel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>

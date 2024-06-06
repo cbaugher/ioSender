@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="CNC.Controls.ConsoleControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 mc:Ignorable="d"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 x:DataType="cnccore:GrblViewModel">
+	
+    <UserControl.Resources>
+        <local:StringCollectionToTextConverter x:Key="OcToString" />
+    </UserControl.Resources>
+	
+    <gb:GroupBox Header="Console" HorizontalAlignment="Center" VerticalAlignment="Top" Width="630" Height="300" Theme="{StaticResource GroupBoxClassic}">
+        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch" Margin="0,0,0,5">
+                <CheckBox Content="Verbose" IsChecked="{Binding ResponseLogVerbose}" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
+                <CheckBox Content="Filter out realtime responses" IsChecked="{Binding ResponseLogFilterRT}" IsEnabled="{Binding ResponseLogVerbose}"
+						  HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
+                <CheckBox Content="Show all realtime responses" IsChecked="{Binding ResponseLogShowRTAll}" IsEnabled="{Binding ResponseLogVerbose}"
+						  HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
+                <Button Content="Clear" HorizontalAlignment="Right" Margin="5,5,5,0" VerticalAlignment="Top" Height="28" Width="60" Click="btn_Clear"/>
+            </DockPanel>
+            <TextBox IsReadOnly="True" TextWrapping="NoWrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                     FontSize="10" FontFamily="Verdana"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                <TextBox.Text>
+                    <MultiBinding Converter="{StaticResource OcToString}">
+                        <Binding Path="ResponseLog" Mode="OneWay"/>
+                        <Binding Path="ResponseLog.Count" Mode="OneWay" />
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+        </DockPanel>
+    </gb:GroupBox>
+</UserControl>

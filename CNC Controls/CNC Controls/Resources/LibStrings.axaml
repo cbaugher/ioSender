@@ -1,0 +1,52 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:system="clr-namespace:System;assembly=mscorlib">
+	<Design.PreviewWith>
+		<Border Padding="20"/>
+	</Design.PreviewWith>
+
+	<system:String x:Key="CreateConfig">Config file not found or invalid, create new?</system:String>
+	<system:String x:Key="CreateConfigFail">Could not save config file.</system:String>
+	<system:String x:Key="ConnectFailed">Unable to open connection ({0})</system:String>
+	<system:String x:Key="NumBlocks">Blocks: {1}</system:String>
+	<system:String x:Key="BlockOfBlocks">Block: {0}/{1}</system:String>
+	<system:String x:Key="HasG17G18Arcs">GCode contains arcs in XZ or YZ plane (G18/19), can't apply transform. Use 'Arcs to Lines' if you really need this.</system:String>
+	<system:String x:Key="HasRadiusArcs">GCode contains radius mode arcs, can't apply transform. Use 'Arcs to Lines' if you really need this.</system:String>
+	<system:String x:Key="ValAllowedRange">Invalid input: allowed range is {0} - {1}.</system:String>
+	<system:String x:Key="ValAllowedMin">Invalid input: minimum allowed value is {0}.</system:String>
+	<system:String x:Key="ValAllowedMax">Invalid input: maximum allowed value is {0}.</system:String>
+	<system:String x:Key="ValNotIPV4">Invalid input: not an IP4 address..</system:String>
+	<system:String x:Key="MsgWaiting">Waiting for controller ({0})...</system:String>
+	<system:String x:Key="MsgNoCommAlarm">Controller is not able to communicate due to alarm {0}, attempting a soft reset.</system:String>
+	<system:String x:Key="MsgResetFailed">Controller soft reset failed, exiting.</system:String>
+	<system:String x:Key="MsgEStop">E-Stop active! - clear before continuing...</system:String>
+	<system:String x:Key="MsgEStopExit">E-Stop still active, exit?</system:String>
+	<system:String x:Key="MsgHome">Homing cycle required, &lt;Home&gt; to continue</system:String>
+	<system:String x:Key="MsgDoorOpen">Door is open, close door and continue?</system:String>
+	<system:String x:Key="MsgDoorExit">Door is still open, exit?</system:String>
+	<system:String x:Key="MsgDoorPersist">Door state cannot be cleared with &lt;Reset&gt;</system:String>
+	<system:String x:Key="MsgNoComm">Controller is in {0} state and cannot respond, try a soft reset?</system:String>
+	<system:String x:Key="MsgResetExit">Controller soft reset failed, exiting.</system:String>
+	<system:String x:Key="MsgNoResponse">Controller is not responding!</system:String>
+	<system:String x:Key="MsgNoResponseExit">No response received from controller, exiting.</system:String>
+	<system:String x:Key="MsgBadResponseExit">Unexpected response received from controller: {0}, exiting.</system:String>
+	<system:String x:Key="StateUnknown">UNKNOWN</system:String>
+	<system:String x:Key="StateIdle">IDLE</system:String>
+	<system:String x:Key="StateRun">RUN</system:String>
+	<system:String x:Key="StateTool">TOOL</system:String>
+	<system:String x:Key="StateHold">HOLD</system:String>
+	<system:String x:Key="StateHome">HOME</system:String>
+	<system:String x:Key="StateCheck">CHECK</system:String>
+	<system:String x:Key="StateJog">JOG</system:String>
+	<system:String x:Key="StateAlarm">ALARM</system:String>
+	<system:String x:Key="StateDoor">DOOR</system:String>
+	<system:String x:Key="StateSleep">SLEEP</system:String>
+	<system:String x:Key="SettingsSaved">Settings saved.</system:String>
+	<system:String x:Key="KeymappingsSaved">Keymappings saved to {0}</system:String>
+	<system:String x:Key="ThemeBlack">Black</system:String>
+	<system:String x:Key="ThemeDark">Dark</system:String>
+	<system:String x:Key="ThemeLight">Light</system:String>
+	<system:String x:Key="ThemeWhite">White</system:String>
+	<system:String x:Key="ThemeDefault">Default</system:String>
+	
+</ResourceDictionary>

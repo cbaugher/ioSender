@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="CNC.Controls.WorkParametersControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 xmlns:ctrl="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 mc:Ignorable="d" d:DesignHeight="90" d:DesignWidth="250"
+			 x:DataType="core:GrblViewModel">
+	
+    <UserControl.Resources>
+        <local:LogicalNotConverter x:Key="BooleanConverter" />
+        <!--<local:BoolToVisibleConverter x:Key="IsVisibleConverter" />-->
+    </UserControl.Resources>
+	
+    <ctrl:GroupBox x:Name="grpWorkParams" Header="Work Parameters" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" HorizontalAlignment="Left"
+			  VerticalAlignment="Top" Height="" Width="250">
+        <Grid HorizontalAlignment="Left" Height="" Margin="-2,4,0,0" VerticalAlignment="Top" Width="242">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45*"/>
+                <ColumnDefinition Width="56*"/>
+                <ColumnDefinition Width="62*"/>
+                <ColumnDefinition Width="60*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="34"/>
+                <RowDefinition Height="24"/>
+            </Grid.RowDefinitions>
+            <Label x:Name="lblOffset" Content="Offset:" HorizontalContentAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Height="26" Margin="0,7" Width="50"/>
+            <!--FIXME: BIND TO "CODE" PROPERTY-->
+			<ComboBox x:Name="cbxOffset" Grid.Column="1" DisplayMemberBinding="" SelectedValueBinding="" ItemsSource="{Binding Path=CoordinateSystems}"
+					  SelectedValue="{Binding Path=WorkCoordinateSystem, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="22"
+					  SelectionChanged="cbxOffset_SelectionChanged"/>
+            <Label x:Name="lblTool" Content="Tool:" Grid.Column="2" HorizontalContentAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Height="26" Width="65"/>
+            <Border x:Name="bgTool" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" CornerRadius="2" Width="60" Height="30" Margin="0,6">
+                <!--<local:NumericComboBox x:Name="cbxTool" IsEditable="False" DisplayMemberPath="Code" SelectedValuePath="Code" ItemsSource="{Binding Path=Tools}"
+									   SelectedValue="{Binding Path=Tool, Mode=OneWay}"  Grid.Column="3" Format="##0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="22"
+									   Margin="0,2" SelectionChanged="cbxTool_SelectionChanged"/>-->
+				<!--FIXME: BIND TO "CODE" PROPERTY, FORMAT="##0"-->
+				<ComboBox x:Name="cbxTool" ItemsSource="{Binding Path=Tools}" SelectedValue="{Binding Path=Tool, Mode=OneWay}"
+						  Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="22" Margin="0,2" SelectionChanged="cbxTool_SelectionChanged"/>
+            </Border>
+            <local:LEDControl Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1" Label="TLO" IsSet="{Binding Path=IsToolOffsetActive, Mode=OneWay}"
+							  IsVisible="{Binding IsParserStateLive}" Margin="10,0,0,0"/>
+            <local:LEDControl Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" Label="TLO ref'd" IsSet="{Binding Path=IsTloReferenceSet, Mode=OneWay}" Margin="10,0,0,0"/>
+        </Grid>
+    </ctrl:GroupBox>
+</UserControl>

@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="CNC.Controls.OutlineFlyout"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:CNC.Controls"
+             mc:Ignorable="d" d:DesignHeight="120" d:DesignWidth="300"
+			 MaxWidth="300"
+             Loaded="OutlineFlyout_Loaded"
+			 xmlns:sys="using:System">
+	
+    <UserControl.Resources>
+        <sys:String x:Key="MenuLabel">_Outline</sys:String>
+        <!--<Style x:Key="SmallXButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+    </UserControl.Resources>
+	<UserControl.Styles>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Grid Background="{TemplateBinding Background}">
+							<ContentPresenter HorizontalAlignment="Center"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</UserControl.Styles>
+	
+	
+	<Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Background="#FFE5E5EA">
+        <Grid Height="120">
+            <local:OutlineBaseControl Margin="0,15,0,0"/>
+            <Button Content="×" Focusable="False" VerticalContentAlignment="Top" HorizontalAlignment="Left"
+					Margin="285,0,0,0" VerticalAlignment="Top" Width="14" Height="18" Click="btn_Close"/>
+        </Grid>
+    </Border>
+
+</UserControl>

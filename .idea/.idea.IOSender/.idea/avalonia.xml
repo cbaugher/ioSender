@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="CNC Controls/CNC Controls/CoolantControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/DROBaseControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/DROControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/GotoBaseControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/JogConfigControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/LimitsBaseControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/MDIControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/SignalControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/SignalControl_T.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/SignalsControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/SpindleControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/TemplatedControl1.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/TestControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="CNC Controls/CNC Controls/WorkParametersControl.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="GroupBox.Avalonia/ControlThemes/ClassicTheme.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="IOSender/Views/GrblView.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="IOSender/Views/JobView.axaml" value="IOSender/IOSender.csproj" />
+        <entry key="IOSender/Views/MainWindow.axaml" value="IOSender/IOSender.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

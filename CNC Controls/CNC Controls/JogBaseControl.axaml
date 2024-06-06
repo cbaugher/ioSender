@@ -1,0 +1,164 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+			 xmlns:system="clr-namespace:System;assembly=mscorlib"
+	         xmlns:local="clr-namespace:CNC.Controls"
+	         xmlns:sys="using:System"
+	         Loaded="JogControl_Loaded"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+	         x:Class="CNC.Controls.JogBaseControl"
+	         xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 x:DataType="local:JogBaseControl">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary>
+					<local:EnumValueToBooleanConverter x:Key="EnumToCheckedConverter" />
+					<local:LogicalNotConverter x:Key="IsNotVisibleConverter"/>
+					<!--<local:LogicalNotConverter x:Key="LogicalNotConverter" />-->
+					<local:LogicalOrConverter x:Key="LogicalOrConverter"/>
+					<local:GrblStateToIsJoggingConverter x:Key ="IsJoggingConverter"/>
+					<local:AxisLetterToJogPlusConverter x:Key="JogPlusConverter"/>
+					<local:AxisLetterToJogMinusConverter x:Key="JogMinusConverter"/>
+				</ResourceDictionary>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+		
+    
+    </UserControl.Resources>
+
+	<UserControl.Styles>
+		<Style Selector="Button">
+			<Setter Property="Width" Value="60"/>
+			<Setter Property="Height" Value="60"/>
+			<Setter Property="Focusable" Value="False"/>
+			<Setter Property="Content" Value="xx"/>
+		</Style>
+	</UserControl.Styles>
+
+	
+	<Grid ColumnDefinitions="Auto, Auto, Auto, Auto">
+		<Grid.IsEnabled>
+            <MultiBinding x:DataType="core:GrblViewModel" Converter="{StaticResource LogicalOrConverter}">
+                <Binding Path="!IsJobRunning"/>
+                <Binding Path="GrblState" Converter="{StaticResource IsJoggingConverter}"/>
+            </MultiBinding>
+        </Grid.IsEnabled>
+
+		<StackPanel Grid.Column="0">
+			<gb:GroupBox Header="Distance" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Top" Theme="{StaticResource GroupBoxClassic}">
+                <StackPanel>
+                    <RadioButton Tag="3"  Content="{Binding JogData.Distance3}"
+								 IsChecked="{Binding JogData.StepSize, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step3}"
+								 HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Click="distance_Click"/>
+                    <RadioButton Tag="2" Content="{Binding JogData.Distance2}"
+								 IsChecked="{Binding JogData.StepSize, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step2}"
+								 HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Click="distance_Click"/>
+                    <RadioButton Tag="1" Content="{Binding JogData.Distance1}"
+								 IsChecked="{Binding JogData.StepSize, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step1}"
+								 HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Click="distance_Click"/>
+                    <RadioButton Tag="0" Content="{Binding JogData.Distance0}"
+								 IsChecked="{Binding JogData.StepSize, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step0}"
+								 HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Click="distance_Click"/>
+					<!--<RadioButton Tag="1" Content="{Binding JogData.StepSize, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step1}"/>-->
+					<!--<RadioButton Tag="0" Content="{Binding JogData.StepSize, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Step0}"/>-->
+                    <Label x:DataType="core:GrblViewModel" Content="{Binding Unit}" Height="20" FontSize="8"/>
+                </StackPanel>
+            </gb:GroupBox>
+            <gb:GroupBox Header="Feed rate" HorizontalAlignment="Left" Margin="5,0,5,5" VerticalAlignment="Top" Theme="{StaticResource GroupBoxClassic}">
+                <StackPanel>
+                    <RadioButton Tag="3" Content="{Binding JogData.Feedrate3}"
+								 IsChecked="{Binding JogData.Feed, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Feed3}"
+								 HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Click="feedrate_Click"/>
+                    <RadioButton Tag="2" Content="{Binding JogData.Feedrate2}"
+								 IsChecked="{Binding JogData.Feed, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Feed2}"
+								 HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Click="feedrate_Click"/>
+                    <RadioButton Tag="1" Content="{Binding JogData.Feedrate1}"
+								 IsChecked="{Binding JogData.Feed, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Feed1}"
+								 HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Click="feedrate_Click"/>
+                    <RadioButton Tag="0" Content="{Binding JogData.Feedrate0}"
+								 IsChecked="{Binding JogData.Feed, Mode=TwoWay, Converter={StaticResource EnumToCheckedConverter}, ConverterParameter=Feed0}"
+								 HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Click="feedrate_Click"/>
+                    <Label x:DataType="core:GrblViewModel" Content="{Binding FeedrateUnit}" Height="20" FontSize="8"/>
+                </StackPanel>
+            </gb:GroupBox>
+        </StackPanel>
+		
+		<!--<StackPanel Grid.Column="1" Orientation="Horizontal" Margin="100,10,5,0" Width="" Height="">-->
+            <StackPanel x:DataType="core:GrblViewModel" Grid.Column="1" Orientation="Horizontal" Width="" Height="" IsVisible="{Binding !LatheModeEnabled}">
+                <StackPanel VerticalAlignment="Center">
+                    <Button Content="X-" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0">
+                    <Button Content="Y+" Click="Button_Click"/>
+                    <Button Tag="stop" Margin="0,5" Click="Button_Click">
+                        <Button.Content>
+                            <Image Source="avares://CNC.Controls/Resources/Symbols_Stop_32xLG.png"/>
+						</Button.Content>
+                    </Button>
+                    <Button Content="Y-" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center">
+                    <Button Content="X+" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                    <Button Content="Z+" Click="Button_Click"/>
+                    <Button Content="Z-" Margin="0,70,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+                </StackPanel>
+            </StackPanel>
+			
+            <StackPanel x:DataType="core:GrblViewModel" Grid.Column="2" Orientation="Horizontal" Width="" Height="" IsVisible="{Binding LatheModeEnabled}">
+                <StackPanel VerticalAlignment="Center">
+                    <Button Content="Z-" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0">
+                    <Button Content="X-" Click="Button_Click"/>
+                    <Button Tag="stop" Margin="0,5" Click="Button_Click">
+                        <Button.Content>
+                            <Image Source="Resources/Symbols_Stop_32xLG.png"/>
+                        </Button.Content>
+                    </Button>
+                    <Button Content="X+" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center">
+                    <Button Content="Z+" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                    <Button Content="Y+"  Click="Button_Click"/>
+                    <Button Content="Y-"  Margin="0,70,0,0" Click="Button_Click"/>
+                </StackPanel>
+            </StackPanel>
+		
+		    <!--<StackPanel Grid.Column="3" Orientation="Horizontal">
+			    <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                    <Button x:DataType="core:GrblViewModel" Content="{Binding Path=AxisLetter.A, Converter={StaticResource JogPlusConverter}, Mode=OneWay}" Click="Button_Click"/>
+                    <Button x:DataType="core:GrblViewModel" Content="{Binding Path=AxisLetter.A, Converter={StaticResource JogMinusConverter}, Mode=OneWay}" Margin="0,70,0,0" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                    <Button x:DataType="core:GrblViewModel" Content="{Binding Path=AxisLetter.B, Converter={StaticResource JogPlusConverter}, Mode=OneWay}" Click="Button_Click"/>
+                    <Button x:DataType="core:GrblViewModel" Content="{Binding Path=AxisLetter.B, Converter={StaticResource JogMinusConverter}, Mode=OneWay}" Margin="0,70,0,0" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                    <Button x:DataType="core:GrblViewModel" Content="{Binding Path=AxisLetter.C, Converter={StaticResource JogPlusConverter}, Mode=OneWay}" Click="Button_Click"/>
+                    <Button x:DataType="core:GrblViewModel" Content="{Binding Path=AxisLetter.C, Converter={StaticResource JogMinusConverter}, Mode=OneWay}" Margin="0,70,0,0" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                    <Button Content="U+" Click="Button_Click"/>
+                    <Button Content="U-" Margin="0,70,0,0" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                    <Button Content="V+" Click="Button_Click"/>
+                    <Button Content="V-" Margin="0,70,0,0" Click="Button_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                    <Button Content="W+" Click="Button_Click"/>
+                    <Button Content="W-" Margin="0,70,0,0" Click="Button_Click"/>
+                </StackPanel>
+		    </StackPanel>-->
+        <!--</StackPanel>-->
+    </Grid>
+</UserControl>

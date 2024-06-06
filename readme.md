@@ -1,4 +1,17 @@
 ## ioSender - a gcode sender for grblHAL and Grbl controllers
+---
+THIS SOFTWARE IS NOT FOR PRODUCTION USE!!!
+
+It is barely more than a proof of concept for porting the Windows based IoSender to Linux via the Avalonia toolkit.
+
+It will compile on Windows using MS Visual Studio 2022 and also JetBrains Rider, and should at least connect to a GRBLHal controller and run a very basic program.
+But there are many things still broken so expect random bugs and crashes.
+
+The hope is to get more people involved to continue the porting effort so that the wonderful IOSender can run on Linux.
+For anyone wanting to contribute to this effort... the main thing needed right now is programmers familiar with WPF/Avalonia.
+Porting IOSender to Linux is a huge effort.  It's taken me months to get it this far and there is still a ways to go.
+I'll never be able to do it myself but with some help I think we can get there.
+
 
 ---
 

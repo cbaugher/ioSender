@@ -41,9 +41,10 @@ using CNC.Core;
 using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+
 
 namespace CNC.Controls
 {
@@ -53,7 +54,7 @@ namespace CNC.Controls
 
         public NumericComboBox()
         {
-            IsEditable = true;
+            //FIXME? IsEditable = true;
         }
 
         public double Value
@@ -70,24 +71,27 @@ namespace CNC.Controls
             }
         }
 
-        public static readonly DependencyProperty FormatProperty = DependencyProperty.Register(nameof(Format), typeof(string), typeof(NumericComboBox), new PropertyMetadata(GrblConstants.FORMAT_METRIC, new PropertyChangedCallback(OnFormatChanged)));
+        //public static readonly DependencyProperty FormatProperty = DependencyProperty.Register(nameof(Format), typeof(string), typeof(NumericComboBox), new PropertyMetadata(GrblConstants.FORMAT_METRIC, new PropertyChangedCallback(OnFormatChanged)));
+        public static readonly AvaloniaProperty<string> FormatProperty = AvaloniaProperty<string>.Register<NumericComboBox,string>(nameof(Format), null, false, Avalonia.Data.BindingMode.Default, null, 
+            null, false);
         public string Format
         {
-            get { return (string)GetValue(FormatProperty); }
+            get => GetValue(FormatProperty) as string;
             set { SetValue(FormatProperty, value); }
         }
-        private static void OnFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //private static void OnFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnFormatChanged(AvaloniaObject d, AvaloniaPropertyChangedEventArgs e)
         {
             NumericProperties.OnFormatChanged(d, ((NumericComboBox)d).np, (string)e.NewValue);
         }
 
-        protected override void OnPreviewTextInput(TextCompositionEventArgs e)
-        {
-            TextBox textBox = (TextBox)e.OriginalSource;
-            string text = textBox.SelectionLength > 0 ? textBox.Text.Remove(textBox.SelectionStart, textBox.SelectionLength) : textBox.Text;
-            text = text.Insert(textBox.CaretIndex, e.Text);
-            e.Handled = !NumericProperties.IsStringNumeric(text, np);
-            base.OnPreviewTextInput(e);
-        }
+        //protected override void OnPreviewTextInput(TextCompositionEventArgs e)
+        //{
+        //    TextBox textBox = (TextBox)e.OriginalSource;
+        //    string text = textBox.SelectionLength > 0 ? textBox.Text.Remove(textBox.SelectionStart, textBox.SelectionLength) : textBox.Text;
+        //    text = text.Insert(textBox.CaretIndex, e.Text);
+        //    e.Handled = !NumericProperties.IsStringNumeric(text, np);
+        //    base.OnPreviewTextInput(e);
+        //}
     }
 }

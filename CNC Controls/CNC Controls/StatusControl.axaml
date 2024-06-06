@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="CNC.Controls.StatusControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
+             mc:Ignorable="d"
+			 xmlns:sys="using:System"
+			 x:DataType="cnccore:GrblViewModel">
+
+	<UserControl.Resources>
+        <sys:String x:Key="ClearEStop">Clear E-Stop before &lt;Reset&gt;></sys:String>
+        <local:GrblStateToColorConverter x:Key="ToColorConverter" />
+        <local:GrblStateToStringConverter x:Key="ToStringConverter" />
+        <local:HomedStateToColorConverter x:Key="HomedStateConverter" />
+        <local:IsHomingEnabledConverter x:Key="HomingEnabledConverter" />
+        <local:LogicalNotConverter x:Key="SleepEnabledConverter" />
+        <local:LogicalOrConverter x:Key="LogicalNorConverter">
+            <local:LogicalOrConverter.FinalConverter>
+                <local:LogicalNotConverter />
+            </local:LogicalOrConverter.FinalConverter>
+        </local:LogicalOrConverter>
+	</UserControl.Resources>
+	
+	<UserControl.Styles>
+        <Style Selector="Button.StatusButtonStyle">
+            <Setter Property="Width" Value="66" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+        <Style Selector="Button.ResetButtonStyle">
+            <Setter Property="Background" Value="LightBlue" />
+            <Setter Property="Width" Value="66" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Template">
+                <ControlTemplate TargetType="Button">
+					<Border x:Name="Border" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="#FF707070" >
+						<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+					</Border>
+				</ControlTemplate>
+            </Setter>
+        </Style>
+		<Style Selector="Button.ResetButtonStyle">
+			<!--FIXME IMPLEMENT WHEN TARGET PROPERTIES ADDED IN AVALONIA-->
+			<!--<ControlTemplate.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="BorderBrush" Value="Red" TargetName="Border" />
+					<Setter Property="Background" Value="#FFFF5050" TargetName="Border" />
+				</Trigger>
+			</ControlTemplate.Triggers>-->
+		</Style>
+		
+		
+	</UserControl.Styles>
+
+	<StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Label x:Name="lblState" Content="State:" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50"/>
+            <TextBox x:Name="txtState" HorizontalAlignment="Left" Margin="2,0" TextWrapping="NoWrap" IsReadOnly="True" VerticalContentAlignment="Center"
+					 HorizontalContentAlignment="Center" VerticalAlignment="Center" Width="90" Text="{Binding GrblState, Converter={StaticResource ToStringConverter}}"
+                     Background="{Binding GrblState, Converter={StaticResource ToColorConverter}}" Padding="0"/>
+			<!--<TextBox x:Name="txtState" HorizontalAlignment="Left" Height="24" Margin="2,0" TextWrapping="NoWrap" IsReadOnly="True" TextAlignment="Center"
+					 VerticalContentAlignment="Center" VerticalAlignment="Center" Width="74" Text="{Binding GrblState, Converter={StaticResource ToStringConverter}}"
+                     Background="{Binding GrblState, Converter={StaticResource ToColorConverter}}"/>-->
+            <CheckBox x:Name="chkCheckMode" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Click="btn_Click"
+                IsChecked="{Binding Path=IsCheckMode, Mode=OneWay}">
+                <CheckBox.IsEnabled>
+                    <MultiBinding Converter="{StaticResource LogicalNorConverter}">
+                        <Binding Path="IsJobRunning"/>
+                        <Binding Path="IsSleepMode"/>
+                    </MultiBinding>
+                </CheckBox.IsEnabled>
+            </CheckBox>
+            <Label Content="Check" VerticalAlignment="Center" Height="26"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,4,0,0" VerticalAlignment="Bottom">
+            <Button x:Name="btnHome" Content="Home" ToolTip.Tip="Ctrl+H" Background="{Binding Path=HomedState, Converter={StaticResource HomedStateConverter}}"
+					Classes="StatusButtonStyle" Click="btn_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource HomingEnabledConverter}">
+                        <Binding Path="GrblState" Mode="OneWay"/>
+                        <Binding Path="IsJobRunning" Mode="OneWay"/>
+                        <Binding Path="IsSleepMode" Mode="OneWay"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
+            <Button x:Name="btnUnlock" Content="Unlock" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip.Tip="Ctrl+U" Classes="StatusButtonStyle" Margin="5,0,0,0" Click="btn_Click"
+                IsEnabled="{Binding Path=IsSleepMode, Converter={StaticResource SleepEnabledConverter}, Mode=OneWay}"/>
+            <!--<Button x:Name="btnReset" Content="Reset" ToolTip.Tip="Ctrl+Shift+R" Classes="ResetButtonStyle" Margin="5,0,0,0"
+					Background="Red" Foreground="White" Click="btn_Click" FontFamily="Segoe UI Semibold" FontSize="14"/>-->
+			<Button x:Name="btnReset" Content="Reset" ToolTip.Tip="Ctrl+Shift+R" Margin="5,0,0,0" Width="66" Height="36" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+					Background="Red" Foreground="White"	FontFamily="Segoe UI Semibold" FontSize="14" Click="btn_Click"/>
+        </StackPanel>
+    </StackPanel>
+
+</UserControl>

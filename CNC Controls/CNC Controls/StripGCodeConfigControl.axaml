@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="CNC.Controls.StripGCodeConfigControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+             mc:Ignorable="d"
+			 x:DataType="local:Config">
+	
+    <gb:GroupBox Header="GCode command stripping" HorizontalAlignment="Left" Theme="{StaticResource GroupBoxClassic}">
+        <Grid ColumnDefinitions="70,70" RowDefinitions="Auto,Auto,Auto,Auto">
+            <Label Grid.Row="0" Grid.Column="0" Content="M6:" HorizontalAlignment="Right"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding CommandIgnoreStates}" SelectedItem="{Binding IgnoreM6, Mode=TwoWay}" HorizontalAlignment="Left" Width="70"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="M7:" HorizontalAlignment="Right"/>
+            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CommandIgnoreStates}" SelectedItem="{Binding IgnoreM7, Mode=TwoWay}" HorizontalAlignment="Left" Width="70"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="M8:" HorizontalAlignment="Right"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding CommandIgnoreStates}" SelectedItem="{Binding IgnoreM8, Mode=TwoWay}" HorizontalAlignment="Left" Width="70"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="G61/G64:" HorizontalAlignment="Right"/>
+            <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding CommandIgnoreStates}" SelectedItem="{Binding IgnoreG61G64, Mode=TwoWay}" HorizontalAlignment="Left" Width="70"/>
+        </Grid>
+    </gb:GroupBox>
+	
+</UserControl>

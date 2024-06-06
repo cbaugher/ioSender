@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="CNC.Controls.DROBaseControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CNC.Controls"
+             mc:Ignorable="d"
+			 xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 x:DataType="cnccore:GrblViewModel">
+
+	<StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Width="190">
+		<Label x:Name="lblAxis" Content="{Binding $parent[1].Label}"
+			   HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="3,0,3,0" Width="30" FontSize="20"/>
+		<!--<NumericUpDown x:Name="txtReadout" Value="{Binding $parent[1].Value, Mode=TwoWay}"
+					   IsReadOnly="True" Background="#FFF8F8F8" Height="29" Width="103" TextAlignment="Right"
+					   FontSize="20" ShowButtonSpinner="False" FormatString="{Binding FormatSigned}"/>-->
+		<NumericUpDown x:Name="txtReadout" 
+					   IsReadOnly="True" Background="#FFF8F8F8" Width="103" TextAlignment="Right"
+					   FontSize="20" ShowButtonSpinner="False" AllowSpin="False" FormatString="{Binding Format}"/>
+		<Button x:Name="btnZero" Content="0" IsEnabled="{Binding !IsJobRunning}" Focusable="False" Margin="3,0,3,0"
+				Height="29" Width="29" Click="btnZero_Click"/>
+		<Button x:Name="btnScaled" Height="29" Focusable="False" Width="10" />
+	</StackPanel>
+</UserControl>

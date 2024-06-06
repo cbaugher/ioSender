@@ -1,0 +1,111 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:CNC.Controls"
+	         xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+             x:Class="CNC.Controls.PortDialog"
+			 mc:Ignorable="d"
+	         x:DataType="local:PortDialog">
+
+	    <UserControl.Resources>
+            <!--<Style x:Key="PortErrorStyle" TargetType="local:NumericTextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="BorderBrush" Value="Green" />
+                        <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                            Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="Ip4ErrorStyle" TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="true">
+                        <Setter Property="TextBox.ToolTip">
+                            <Setter.Value>
+                                <Binding RelativeSource="{RelativeSource Self}" Path="(Validation.Errors)[0].ErrorContent" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>-->
+        </UserControl.Resources>
+
+	<gb:GroupBox Header="Sender Connection" HorizontalAlignment="Left" Theme="{StaticResource GroupBoxClassic}">
+        <Grid>
+            <TabControl x:Name="tab" Margin="5,0" VerticalAlignment="Top">
+			
+                <TabItem Header="Serial">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <Label Content="Port:" HorizontalContentAlignment="Right" Width="90" VerticalAlignment="Center"/>
+							<ComboBox HorizontalAlignment="Left" Width="285"
+									  DropDownOpened="CbxPorts_DropDownOpened" ItemsSource="{Binding Prop.Com.Ports}" DisplayMemberBinding="{Binding FullName}"
+									  SelectedValue="{Binding Prop.Com.SelectedPort, Mode=TwoWay}" SelectedValueBinding="{Binding Name}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <Label Content="Baud rate:" HorizontalContentAlignment="Right" Width="90" VerticalAlignment="Center"/>
+							<ComboBox HorizontalAlignment="Left" Width="120" ItemsSource="{Binding Prop.Com.Baud}"
+									  SelectedValue="{Binding Prop.Com.SelectedBaud, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <Label Content="On connect:" HorizontalContentAlignment="Right" Width="90" VerticalAlignment="Center"/>
+							<ComboBox HorizontalAlignment="Left" Width="120" ItemsSource="{Binding Prop.Com.ConnectModes}"
+									  SelectedItem="{Binding Prop.Com.SelectedMode, Mode=TwoWay}" DisplayMemberBinding="{Binding Name}"
+                                      SelectedValueBinding="{Binding Mode}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+            
+			    <TabItem Header="Network">
+                    <StackPanel>
+                        <CheckBox Content="WebSocket" IsChecked="{Binding Prop.IsWebSocket, Mode=TwoWay}" Margin="80,5,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <Label Content="Port:" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Width="80"/>
+                            <!--<local:NumericTextBox Style="{StaticResource PortErrorStyle}" Format="####0">
+                                <local:NumericTextBox.Value>
+                                    <Binding Path="NetPort" Mode="TwoWay" ValidatesOnNotifyDataErrors="True" ValidatesOnDataErrors="True" NotifyOnValidationError="True" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:NumericRangeRule Min="0" Max="65535" ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </local:NumericTextBox.Value>
+                            </local:NumericTextBox>-->
+							<NumericUpDown FormatString="####0" ShowButtonSpinner="False">
+								<NumericUpDown.Value>
+									<Binding Path="Prop.NetPort" Mode="TwoWay"/>
+								</NumericUpDown.Value>
+							</NumericUpDown>
+
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                            <Label Content="IP address:" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Width="80"/>
+                            <!--<TextBox Style="{StaticResource Ip4ErrorStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Bottom" Height="24" Width="95" MaxLength="15">
+                                <TextBox.Text>
+                                    <Binding Path="IpAddress" Mode="TwoWay" ValidatesOnNotifyDataErrors="True" ValidatesOnDataErrors="True" NotifyOnValidationError="True" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:IP4ValueRule ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>-->
+							<TextBox HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Bottom" Height="24" Width="95">
+								<TextBox.Text>
+									<Binding Path="Prop.IpAddress" Mode="TwoWay"/>
+								</TextBox.Text>
+							</TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+			
+            </TabControl>
+		
+            <StackPanel Height="23" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,110,0,5">
+                <!--<Button x:Name="btnOk" Content="Ok" Height="23" Width="70" Click="btnOk_Click"/>
+                <Button x:Name="btnCancel" Content="Cancel" Margin="5,0,0,0" Height="23" Width="70" Click="btnCancel_Click"/>-->
+            </StackPanel>
+		
+        </Grid>
+	</gb:GroupBox>
+</UserControl>

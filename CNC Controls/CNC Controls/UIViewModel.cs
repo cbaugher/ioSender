@@ -39,18 +39,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System.Linq;
 using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
+//using System.Windows;
+//using System.Windows.Controls;
+using Avalonia.Controls;
 using CNC.Core;
+using Avalonia.Controls.Primitives;
 
 namespace CNC.Controls
 {
 
-    //public class CNCView
-    //{
-    //    public string Label { get; set; }
-    //    public ICNCView View { get; set; } 
-    //}
+    public class CNCView
+    {
+        public string Label { get; set; }
+        public ICNCView View { get; set; } 
+    }
 
     public class UIViewModel : ViewModelBase
     {
@@ -58,14 +60,15 @@ namespace CNC.Controls
 
         public UIViewModel()
         {
-            //CNCViews = new ObservableCollection<CNCView>();
+            CNCViews = new ObservableCollection<CNCView>();
             SidebarItems = new ObservableCollection<SidebarItem>();
             ConfigControls = new ObservableCollection<UserControl>();
         }
 
         public ICamera Camera { get; set; }
-        public ConsoleWindow Console { get; set; }
-        //public ObservableCollection<CNCView> CNCViews { get;  }
+        //public ConsoleWindow Console { get; set; }
+        public Window Console { get; set; }
+        public ObservableCollection<CNCView> CNCViews { get;  }
         public ObservableCollection<SidebarItem> SidebarItems { get; }
         public ObservableCollection<UserControl> ConfigControls { get; }
         public ObservableCollection<MenuItem> TransformMenuItems { get; } = new ObservableCollection<MenuItem>();
@@ -86,7 +89,8 @@ namespace CNC.Controls
                     foreach (SidebarItem cmd in SidebarItems)
                     {
                         cmd.IsEnabled = _currentView.ViewType == ViewType.GRBL || _currentView.ViewType == ViewType.Probing;
-                        cmd.Visibility = Visibility.Hidden;
+                        //cmd.Visibility = Visibility.Hidden;
+                        cmd.IsVisible = false;
                     }
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(CurrentViewType));

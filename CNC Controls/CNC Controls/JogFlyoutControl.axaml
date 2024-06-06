@@ -1,0 +1,32 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"
+			 xmlns:system="clr-namespace:System;assembly=mscorlib"
+			 xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:sys="using:System"
+			 x:Class="CNC.Controls.JogFlyoutControl"
+			 Loaded="JogControl_Loaded">
+
+
+	<UserControl.Resources>
+		<sys:String x:Key="MenuLabel">_Jog</sys:String>
+
+	<!--<ResourceDictionary>
+            --><!--<system:String x:Uid="str_jogFlyout" x:Key="MenuLabel">_Jog</system:String>--><!--
+            --><!--<ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="SharedStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>--><!--
+        </ResourceDictionary>-->
+	</UserControl.Resources>
+
+	<Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Background="#FFE5E5EA">
+        <Grid>
+            <local:JogBaseControl x:Name="jogBase"/>
+            <Button Content="×" Focusable="False" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right"
+					Margin="0,0,0,0" VerticalAlignment="Top" Click="btn_Close"/>
+        </Grid>
+    </Border>
+
+</UserControl>

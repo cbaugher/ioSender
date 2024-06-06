@@ -41,8 +41,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Input;
+//using System.Windows.Controls;
+//using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
 using System.Xml.Serialization;
 using CNC.GCode;
 
@@ -65,7 +67,8 @@ namespace CNC.Core
             internal string method, dummy;
 
             public Key Key;
-            public ModifierKeys Modifiers;
+            //public ModifierKeys Modifiers;
+            public KeyModifiers Modifiers;
             public bool OnUp;
             [XmlIgnore]
             public UserControl context;
@@ -82,11 +85,13 @@ namespace CNC.Core
         private GrblViewModel grbl;
         private List<KeypressHandlerFn> handlers = new List<KeypressHandlerFn>();
 
-        public void AddHandler(Key key, ModifierKeys modifiers, Func<Key, bool> handler, UserControl context = null, bool onUp = true)
+        //public void AddHandler(Key key, ModifierKeys modifiers, Func<Key, bool> handler, UserControl context = null, bool onUp = true)
+        public void AddHandler(Key key, KeyModifiers modifiers, Func<Key, bool> handler, UserControl context = null, bool onUp = true)
         {
             handlers.Add(new KeypressHandlerFn(){Key = key, Modifiers = modifiers, Call = handler, context = context, OnUp = onUp });
         }
-        public void AddHandler(Key key, ModifierKeys modifiers, Func<Key, bool> handler, bool onUp)
+        //public void AddHandler(Key key, ModifierKeys modifiers, Func<Key, bool> handler, bool onUp)
+        public void AddHandler(Key key, KeyModifiers modifiers, Func<Key, bool> handler, bool onUp)
         {
             handlers.Add(new KeypressHandlerFn() { Key = key, Modifiers = modifiers, Call = handler, context = null, OnUp = onUp });
         }
@@ -163,17 +168,18 @@ namespace CNC.Core
             }
             catch
             {
-                System.Windows.MessageBox.Show("keymap file is corrupt!", "ioSender", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+//                System.Windows.MessageBox.Show("keymap file is corrupt!", "ioSender", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
 
             return ok;
         }
-
+        /* FIXME
         public bool ProcessKeypress(KeyEventArgs e, bool allowJog, UserControl context = null)
         {
             bool isJogging = IsJogging, jogkeyPressed = false;
             double[] dist = new double[4] { 0d, 0d, 0d, 0d };
-
+            
+            
             if (e.IsUp && isJogging)
             {
                 bool cancel = !allowJog;
@@ -196,7 +202,7 @@ namespace CNC.Core
                 if (cancel && !isJogging && jogMode != JogMode.Step)
                     JogCancel();
             }
-
+            
             if (!isJogging && allowJog && Comms.com.OutCount != 0)
                 return true;
 
@@ -443,10 +449,10 @@ namespace CNC.Core
                         return handler.Call(e.Key);
                 }
             }
-
+            
             return jogkeyPressed;
         }
-
+*/
         public void JogCancel()
         {
             while (Comms.com.OutCount != 0) ;

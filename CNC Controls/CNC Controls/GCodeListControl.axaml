@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="CNC.Controls.GCodeListControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 xmlns:code="clr-namespace:CNC.GCode;assembly=CNC.Core"
+			 mc:Ignorable="d" d:DesignHeight="335" d:DesignWidth="400"
+             Loaded="UserControl_Loaded"
+			 x:DataType="local:GCode">
+	
+    <!--<DataGrid x:Name="grdGCode" Grid.Row="0" ItemsSource="{Binding}" AllowDrop="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False"
+                   CanUserSortColumns="false" CanUserResizeRows="False" IsReadOnly="true" DragEnter="grdGCode_Drag" DragOver="grdGCode_Drag" DragLeave="grdGCode_Drag" Drop="grdGCode_Drop">-->
+	<!--FIXME DRAG DROP-->
+	<StackPanel>
+	<DataGrid x:Name="grdGCode" Grid.Row="0" ItemsSource="{Binding}" DragDrop.AllowDrop="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+			  AutoGenerateColumns="False" CanUserSortColumns="false" IsReadOnly="true">
+        <DataGrid.Columns>
+            <!--<DataGridTextColumn Header="Block" Binding="{Binding LineNum}" Width="50" MinWidth="50" MaxWidth="60"/>
+            <DataGridTextColumn Header="" Binding="{Binding Sent}" MinWidth="30" MaxWidth="60"/>
+            <DataGridTextColumn Header="Data" Binding="{Binding Data}" MinWidth="280"/>-->
+        </DataGrid.Columns>
+    </DataGrid>
+		<TextBlock Text="{Binding File.FileName}"/>
+	</StackPanel>
+</UserControl>

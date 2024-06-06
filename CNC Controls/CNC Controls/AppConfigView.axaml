@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="CNC.Controls.AppConfigView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:sys="using:System"
+             mc:Ignorable="d">
+
+	<UserControl.Resources>
+		<sys:String x:Key="RestartMessage">A restart is required after changing settings!</sys:String>
+		<Style x:Key="ConfigButtonStyle" Selector="Button">
+			<Setter Property="MinWidth" Value="90" />
+			<Setter Property="MaxWidth" Value="150" />
+			<Setter Property="Height" Value="22" />
+			<Setter Property="Padding" Value="5,0" />
+			<Setter Property="VerticalAlignment" Value="Top" />
+		</Style>
+	</UserControl.Resources>
+
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+			<Button x:Name="btnSave" Content="Save settings" Margin="5" Padding="5,0" Click="btnSave_Click"/>
+			<Button x:Name="btnSaveKeyMap" Content="Save keymappings" Width="130" Margin="5" Padding="5,0"
+					Click="btnSaveKeyMap_Click"/>
+		</StackPanel>
+		<ItemsControl x:Name="xx" DockPanel.Dock="Top">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel Orientation="Horizontal" Margin="5,5,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
+	</DockPanel>
+	
+</UserControl>

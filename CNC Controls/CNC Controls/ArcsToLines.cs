@@ -39,10 +39,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Media.Media3D;
+//using System.Windows.Media.Media3D;
 using CNC.Core;
 using CNC.GCode;
-using System.Windows;
+//using System.Windows;
 
 namespace CNC.Controls
 {

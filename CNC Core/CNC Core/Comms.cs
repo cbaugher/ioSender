@@ -38,7 +38,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System;
-using System.Windows.Threading;
+using System.Threading;
+
+//using System.Windows.Threading;
+using Avalonia.Threading;
 
 namespace CNC.Core
 {
@@ -103,16 +106,25 @@ namespace CNC.Core
     {
         public static void DoEvents()
         {
+            // REMOVE WHEN TESTED ENOUGH
+            //DispatcherFrame frame = new DispatcherFrame();
+            //Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(ExitFrame), frame);
+            //Dispatcher.PushFrame(frame);
+
+            // This seems to work without MSWindows
             DispatcherFrame frame = new DispatcherFrame();
-            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(ExitFrame), frame);
-            Dispatcher.PushFrame(frame);
+            Dispatcher.UIThread.InvokeAsync(() => { frame.Continue = false; }, DispatcherPriority.Background);
+            Dispatcher.UIThread.PushFrame(frame);
+
         }
 
-        public static object ExitFrame(object f)
-        {
-            ((DispatcherFrame)f).Continue = false;
+        //private static readonly System.Action VoidAction;
 
-            return null;
-        }
+        //public static object ExitFrame(object f)
+        //{
+        //    ((DispatcherFrame)f).Continue = false;
+
+        //    return null;
+        //}
     }
 }

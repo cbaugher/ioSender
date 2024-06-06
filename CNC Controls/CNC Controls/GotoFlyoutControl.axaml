@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="CNC.Controls.GotoFlyoutControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+             mc:Ignorable="d" d:DesignHeight="100" d:DesignWidth="200"
+             Focusable="False"
+			 xmlns:sys="using:System"
+             MinHeight="100" MinWidth="200">
+    <UserControl.Resources>
+		<sys:String x:Key="MenuLabel">_Goto</sys:String>
+		<!--<ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="SharedStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>-->
+    </UserControl.Resources>
+	
+    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Background="#FFE5E5EA">
+        <Grid>
+            <local:GotoBaseControl Margin="15,15,0,0"/>
+            <Button Content="×" Focusable="False" VerticalContentAlignment="Top" HorizontalAlignment="Right" Margin="0,0,5,0"
+					VerticalAlignment="Top" Width="14" Height="18" Click="btn_Close"/>
+        </Grid>
+    </Border>
+</UserControl>

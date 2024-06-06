@@ -1,0 +1,13 @@
+﻿<Window x:Class="CNC.Controls.ConsoleWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CNC.Controls"
+        mc:Ignorable="d"
+        ShowActivated="False"
+        Background="#FFE5E5E5"
+        Title="Sender Console" Height="500" MinHeight="115" Width="650" MinWidth="350" ShowInTaskbar="False"
+        Closing="Window_Closing">
+    <local:ConsoleControl/>
+</Window>

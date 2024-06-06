@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
+             xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls"
              xmlns:local="clr-namespace:CNC.Controls.DragKnife"
              mc:Ignorable="d" 
              d:DesignHeight="320" d:DesignWidth="300"

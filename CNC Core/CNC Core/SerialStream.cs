@@ -40,12 +40,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+//using MsBox.Avalonia;
 using System.IO;
 using System.IO.Ports;
 using System.Management;
-using System.Windows.Threading;
+using Avalonia.Threading;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using CNC.Core;
+using System.Threading.Tasks;
+using System.Threading;
+using System.ComponentModel;
+
 
 namespace CNC.Core
 {
@@ -58,6 +64,9 @@ namespace CNC.Core
         private Dispatcher Dispatcher { get; set; }
 
         public event DataReceivedHandler DataReceived;
+        private int dataReceivedCount=0;
+
+        Task ReadSerialTask;  // Task handle for the serial reading thread
 
 #if RESPONSELOG
         StreamWriter log = null;
@@ -75,7 +84,9 @@ namespace CNC.Core
 
             if (parameter.Count() < 4)
             {
-                MessageBox.Show(string.Format(LibStrings.FindResource("SerialPortError"), PortParams), "ioSender");
+                //MessageBox.Show(string.Format(LibStrings.FindResource("SerialPortError"), PortParams), "ioSender");
+//                var messageBoxStandardWindow = MessageBoxManager.GetMessageBoxStandard(string.Format(LibStrings.FindResource("SerialPortError"), PortParams), "iosender");
+//                messageBoxStandardWindow.ShowAsync();
                 System.Environment.Exit(2);
             }
 
@@ -89,6 +100,7 @@ namespace CNC.Core
             serialPort.ReadTimeout = 50;
             serialPort.ReadBufferSize = Comms.RXBUFFERSIZE;
             serialPort.WriteBufferSize = Comms.TXBUFFERSIZE;
+
 
             if (parameter.Count() > 4) switch (parameter[4])
             {
@@ -142,6 +154,13 @@ namespace CNC.Core
                         break;
                 }
 
+                //FIXME CONVERT TO BASESTREAM  Spawn a continuous reader task
+                //CTS_ReadSerial?.Dispose();  // should already be disposed
+                //CTS_ReadSerial = new CancellationTokenSource();
+                //ct_ReadSerial = CTS_ReadSerial.Token;
+                //ReadSerialTask = Task.Run(() => { ReadSerialBytes_AsyncLoop(); });
+
+
 #if RESPONSELOG
                 if (Resources.DebugFile != string.Empty) try
                 {
@@ -149,7 +168,10 @@ namespace CNC.Core
                 }
                 catch
                 {
-                    MessageBox.Show("Unable to open log file: " + Resources.DebugFile, "ioSender");
+                    //MessageBox.Show("Unable to open log file: " + Resources.DebugFile, "ioSender");
+//                    var messageBoxStandardWindow = MessageBoxManager.GetMessageBoxStandard("Unable to open log file: ", "iosender");
+//                    messageBoxStandardWindow.ShowAsync();
+
                 }
 #endif
             }
@@ -166,7 +188,10 @@ namespace CNC.Core
     catch { }
 #endif
             if (!IsClosing && IsOpen)
+            {
+                ReadSerialTask.Dispose();
                 Close();
+            }
         }
 
         public Comms.StreamType StreamType { get { return Comms.StreamType.Serial; } }
@@ -223,7 +248,7 @@ namespace CNC.Core
                 IsClosing = true;
                 try
                 {
-                    serialPort.DataReceived -= SerialPort_DataReceived;
+                    //serialPort.DataReceived -= SerialPort_DataReceived;
                     serialPort.DtrEnable = false;
                     serialPort.RtsEnable = false;
                     serialPort.DiscardInBuffer();
@@ -332,6 +357,48 @@ namespace CNC.Core
         }
 
 
+        // Serial port continuous reader task
+        // Used for serial Basestream
+        private async void ReadSerialBytes_AsyncLoop()
+        {
+            const int bytesToRead = 1024;
+            while (serialPort.IsOpen)
+            {
+                try
+                {
+                    var receiveBuffer = new byte[bytesToRead];
+                    var numBytesRead = await serialPort.BaseStream?.ReadAsync(receiveBuffer, 0, bytesToRead);
+                    var byteArray = new byte[numBytesRead];
+                    Array.Copy(receiveBuffer, byteArray, numBytesRead);
+
+                    //InBuffer.Enqueue(byteArray, 0, numBytesRead); // add the new data to a "thread-safe" buffer
+
+                    int pos = 0;
+
+                    lock (input)
+                    {
+                        input.Append(byteArray);
+
+
+                    }
+
+
+                }
+                catch (Exception e)
+                {
+                    // Any exception means the connection is gone or the port is gone, so the session must be stopped.
+                    // Note that an IOException is always thrown by the serial port basestream when exit is requested.
+                    // In my context, there is no value in passing these exceptions along.
+                    if (serialPort?.BaseStream != null)
+                    {
+                            serialPort?.Dispose();
+                    }
+                }
+            }
+        }
+
+
+
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             int pos = 0;
@@ -340,6 +407,8 @@ namespace CNC.Core
             //{
             //    DataReceived(s);
             //};
+
+            CancellationToken ct = new CancellationToken();
 
             lock (input)
             {
@@ -359,8 +428,15 @@ namespace CNC.Core
                         }
 #endif
                         if (Reply.Length != 0 && DataReceived != null)
-                            Dispatcher.BeginInvoke(DataReceived, Reply);
-                        //                            Dispatcher.Invoke(addEdge, Reply);
+                            //  Dispatcher.BeginInvoke(DataReceived, Reply);
+
+                            // This needs to be synchronous or else it will not process data in time.  Avalonia dispatcher is single threaded so dispatched tasks run on the UI thread.
+                            // A timeout is used so that when the app is closed, this process doesn't hang if the data processing task is killed mid execution.
+                            // There is probably a more elegant way to do this.
+                            try { Dispatcher.Invoke(() => DataReceived(Reply), DispatcherPriority.Send, ct, System.TimeSpan.FromMilliseconds(500)); }
+                            catch { } // Catch the timeout exception and ignore because we're exiting anyway and don't care                        
+                        
+                        //ORIG    Dispatcher.Invoke(addEdge, Reply);
 
                         state = Reply == "ok" ? Comms.State.ACK : (Reply.StartsWith("error") ? Comms.State.NAK : Comms.State.DataReceived);
                     }

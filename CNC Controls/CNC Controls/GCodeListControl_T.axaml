@@ -1,0 +1,30 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:CNC.Controls"
+		x:DataType="controls:GCodeListControl_T">
+	
+  <Design.PreviewWith>
+    <controls:GCodeListControl_T />
+  </Design.PreviewWith>
+
+  <Style Selector="controls|GCodeListControl_T">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+
+		  <!--<DataGrid x:Name="grdGCode" Grid.Row="0" ItemsSource="{Binding}" AllowDrop="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False"
+                   CanUserSortColumns="false" CanUserResizeRows="False" IsReadOnly="true" DragEnter="grdGCode_Drag" DragOver="grdGCode_Drag" DragLeave="grdGCode_Drag" Drop="grdGCode_Drop">-->
+		  <!--FIXME DRAG DROP-->
+		  <DataGrid x:Name="grdGCode" Grid.Row="0" ItemsSource="{Binding}" DragDrop.AllowDrop="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False"
+					 CanUserSortColumns="false" IsReadOnly="true">
+			  <!--<DataGrid.Columns>
+				  <DataGridTextColumn Header="Block" Binding="{ReflectionBinding LineNum}" Width="50" MinWidth="50" MaxWidth="60"/>
+				  <DataGridTextColumn Header="" Binding="{ReflectionBinding Sent}" Width="*" MinWidth="30" MaxWidth="60"/>
+				  <DataGridTextColumn Header="Data" Binding="{ReflectionBinding Data}" Width="*" MinWidth="280"/>
+			  </DataGrid.Columns>-->
+		  </DataGrid>
+	  
+	  </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

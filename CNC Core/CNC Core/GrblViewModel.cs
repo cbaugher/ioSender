@@ -39,22 +39,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Linq;
-using System.Windows.Media;
+//using System.Windows.Media;
+using Avalonia;
+using Avalonia.Media;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Threading;
 using CNC.GCode;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CNC.Core
 {
-    public class GrblViewModel : MeasureViewModel
+    public partial class GrblViewModel : MeasureViewModel
     {
-        private string _tool, _message, _WPos, _MPos, _wco, _wcs, _a, _fs, _ov, _pn, _sc, _sd, _fans, _d, _gc, _h, _thcv, _thcs;
+        //private string _tool, _message, _WPos, _MPos, _wco, _wcs, _a, _fs, _ov, _pn, _sc, _sd, _fans, _d, _gc, _h, _thcv, _thcs;
+        private string _tool, _message, _WPos, _MPos, _wco, _wcs, _a, _fs, _ov, _sc, _sd, _fans, _d, _gc, _h, _thcv, _thcs;
+        private string _pn;
         private string _mdiCommand, _fileName;
         private string[] _rtState = new string[3];
         private bool has_wco = false, _hasFans = false;
         private bool _flood, _mist, _fan0, _toolChange, _reset, _isMPos, _isJobRunning, _isProbeSuccess, _pgmEnd, _isParserStateLive, _isTloRefSet;
         private bool _isCameraVisible = false, _responseLogVerbose = false, _isProbing = false, _autoReporting = false;
+       // private bool _responseLogShowRTAll=false;  //REMOVE
+
         private bool? _mpg;
         private int _pwm, _line, _scrollpos, _blocks = 0, _executingBlock = 0, _auxinValue = -2, _autoReportInterval = 0;
         private double _feedrate = 0d;
@@ -66,6 +74,10 @@ namespace CNC.Core
         private double _thcVoltage = double.NaN;
         private string _pb_avail, _rxb_avail;
         private GrblState _grblState;
+
+        //[ObservableProperty]private GrblState _grblState1;
+        //[ObservableProperty]private int _grblState2;
+
         private LatheMode _latheMode = LatheMode.Disabled;
         private HomedState _homedState = HomedState.Unknown;
         private GrblEncoderMode _encoder_ovr = GrblEncoderMode.Unknown;
@@ -73,6 +85,7 @@ namespace CNC.Core
         public SpindleState _spindleStatePrev = GCode.SpindleState.Off;
 
         private Thread pollThread = null;
+        private CancellationTokenSource pt_cancel;
 
         public Action<string> OnCommandResponseReceived;
         public Action<string> OnResponseReceived;
@@ -83,19 +96,26 @@ namespace CNC.Core
 
         public delegate void GrblResetHandler();
 
+
         public GrblViewModel()
         {
             _a = _pn = _fs = _sc = _tool = string.Empty;
 
             Clear();
-
+                                    
+            pt_cancel = new CancellationTokenSource();
+            //pollThread = new Thread(new ThreadStart(Poller.Run(pt_cancel)));
+            pollThread = new Thread(new ParameterizedThreadStart(Poller.Run));
+            pollThread.Start(pt_cancel.Token);
+            
             Keyboard = new KeypressHandler(this);
             MDICommand = new ActionCommand<string>(ExecuteMDI);
 
-            pollThread = new Thread(new ThreadStart(Poller.Run));
-            pollThread.Start();
-
             _grblState.LastAlarm = 0;
+            //int sdff = GrblState1.LastAlarm;
+
+
+            //GrblState2 = 0;
 
             AxisLetter.PropertyChanged += Axisletter_PropertyChanged;
             Signals.PropertyChanged += Signals_PropertyChanged;
@@ -110,6 +130,7 @@ namespace CNC.Core
             ToolOffset.PropertyChanged += ToolOffset_PropertyChanged;
         }
 
+
         private void Axisletter_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             OnPropertyChanged(nameof(AxisLetter));
@@ -123,7 +144,8 @@ namespace CNC.Core
 
         ~GrblViewModel()
         {
-            pollThread.Abort();
+            //pollThread.Abort();
+            Poller.Cancel(pt_cancel);
         }
 
         private void ToolOffset_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -300,7 +322,7 @@ namespace CNC.Core
                     }
                     catch (Exception e)
                     {
-                        if (!(ok = System.Windows.MessageBox.Show(string.Format(LibStrings.FindResource("LoadError").Replace("\\n", "\r"), e.Message, i + 1, commands[i]), "ioSender", System.Windows.MessageBoxButton.YesNo) == System.Windows.MessageBoxResult.Yes))
+//                        if (!(ok = System.Windows.MessageBox.Show(string.Format(LibStrings.FindResource("LoadError").Replace("\\n", "\r"), e.Message, i + 1, commands[i]), "ioSender", System.Windows.MessageBoxButton.YesNo) == System.Windows.MessageBoxResult.Yes))
                             break;
                     }
                 }
@@ -322,6 +344,7 @@ namespace CNC.Core
         public bool ResponseLogFilterRT { get; set; } = false;
         public bool ResponseLogFilterOk { get; set; } = false;
         public bool ResponseLogShowRTAll { get; set; } = false;
+        //public bool ResponseLogShowRTAll { get { return _responseLogShowRTAll; } set { _responseLogShowRTAll = value; OnPropertyChanged(); } }
 
         public bool IsReady { get; set; } = false;
         public bool IsGrblHAL { get { return GrblInfo.IsGrblHAL; } }
@@ -369,6 +392,7 @@ namespace CNC.Core
         //        public bool CanReset { get { return _canReset; } private set { if(value != _canReset) { _canReset = value; OnPropertyChanged(); } } }
         public bool GrblReset { get { return _reset; } set { if ((_reset = value)) { _grblState.Error = 0; OnPropertyChanged(); Message = ""; } } }
         public GrblState GrblState { get { return _grblState; } set { _grblState = value; OnPropertyChanged(); } }
+        //private GrblState _grblState_s = new GrblState();
         public bool AutoReportingEnabled { get { return _autoReporting; } private set { { _autoReporting = value; OnPropertyChanged(); } } }
         public int AutoReportInterval { get { return _autoReportInterval;  } private set { { _autoReportInterval = value;  OnPropertyChanged();  } } }
         public bool IsGCLock { get { return _grblState.State == GrblStates.Alarm; } }
@@ -384,7 +408,8 @@ namespace CNC.Core
         public string WorkCoordinateSystem { get { return _wcs; } private set { _wcs = value; OnPropertyChanged(); } }
         public Position MachinePosition { get; private set; } = new Position();
         public Position WorkPosition { get; private set; } = new Position();
-        public Position Position { get; private set; } = new Position();
+        public Position Position { get; 
+            private set; } = new Position();
         public bool IsMachinePosition { get { return _isMPos; } private set { _isMPos = value; OnPropertyChanged(); } }
         public bool IsMachinePositionKnown { get { return MachinePosition.IsSet(GrblInfo.AxisFlags); } }
         public bool SuspendPositionNotifications
@@ -403,6 +428,9 @@ namespace CNC.Core
         public bool IsProbeSuccess { get { return _isProbeSuccess; } private set { _isProbeSuccess = value; OnPropertyChanged(); } }
         public EnumFlags<SpindleState> SpindleState { get; private set; } = new EnumFlags<SpindleState>(GCode.SpindleState.Off);
         public EnumFlags<Signals> Signals { get; private set; } = new EnumFlags<Signals>(Core.Signals.Off);
+
+        [ObservableProperty]private EnumFlags<Signals> _signals1 = new EnumFlags<Signals>(Core.Signals.Off);
+
         public EnumFlags<Signals> OptionalSignals { get; set; } = new EnumFlags<Signals>(Core.Signals.Off);
         public EnumFlags<AxisFlags> AxisScaled { get; private set; } = new EnumFlags<AxisFlags>(AxisFlags.None);
         public string FileName { get { return _fileName; } set { _fileName = value; SDRewind = false; OnPropertyChanged(); OnPropertyChanged(nameof(IsFileLoaded)); OnPropertyChanged(nameof(IsPhysicalFileLoaded)); } }
@@ -634,7 +662,9 @@ namespace CNC.Core
 
         public bool IsParserStateLive { get { return _isParserStateLive; } set { _isParserStateLive = value; OnPropertyChanged(); } }
         public bool SysCommandsAlwaysAvailable { get; private set; }
-        
+
+      
+
         #endregion
 
         public bool SetGRBLState(string newState, int substate, bool force)
@@ -818,7 +848,7 @@ namespace CNC.Core
         }
 
         private bool canReset ()
-        {
+        {//FIX TO SIGNALS1
             return !(GrblState.State == GrblStates.Door || (GrblState.State == GrblStates.Alarm && GrblState.Substate == 11) || Signals.Value.HasFlag(Core.Signals.EStop));
         }
 
@@ -952,6 +982,7 @@ namespace CNC.Core
                     if (_pn != value)
                     {
                         _pn = value;
+                        //Pn = value;
 
                         int s = 0;
                         foreach (char c in _pn)
@@ -960,10 +991,15 @@ namespace CNC.Core
                             if (i >= 0)
                                 s |= (1 << i);
                         }
-                        Signals.Value = (Signals)s;
+                        Signals.Value = (Signals)s;  //OLD
+                        Signals1.Value = (Signals)s;
                         if(Signals.Value.HasFlag(Core.Signals.EStop) && !OptionalSignals.Value.HasFlag(Core.Signals.EStop))
                             OptionalSignals.Value |= Core.Signals.EStop;
-//                        CanReset = canReset();
+                        
+                        //if (Signals1.Value.HasFlag(Core.Signals.EStop) && !OptionalSignals.Value.HasFlag(Core.Signals.EStop))
+                        //    OptionalSignals.Value |= Core.Signals.EStop;
+
+                        //                        CanReset = canReset();
                     }
                     break;
 
@@ -1108,7 +1144,8 @@ namespace CNC.Core
             return data.StartsWith("[SETTING:") || data.StartsWith("[ERRORCODE:") || data.StartsWith("[ALARMCODE:") || data.StartsWith("[SETTINGGROUP:") || data.StartsWith("[SETTINGDESCR:");
         }
 
-        public void DataReceived(string data)
+ 
+    public void DataReceived(string data)
         {
             if (data.Length == 0)
                 return;
@@ -1120,6 +1157,13 @@ namespace CNC.Core
             }
 
             bool stateChanged = true;
+
+            int i = 0;
+            if(data.First() == '$')
+            {
+                ++i;
+            }
+
 
             if (data.First() == '<')
             {

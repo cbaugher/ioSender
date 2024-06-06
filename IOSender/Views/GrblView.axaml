@@ -1,0 +1,292 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:CNC.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" Background="#FFE5E5E5"
+             xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
+	         xmlns:cnccontrols="clr-namespace:CNC.Controls;assembly=CNC.Controls"
+			 xmlns:local="clr-namespace:IOSender.Views;assembly=IOSender"
+			 x:Class="IOSender.Views.GrblView"
+			 x:DataType="cnccore:GrblViewModel" xmlns:sys="using:System"
+			 xmlns:sty="using:FluentAvalonia.Styling" xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+			 Loaded="Window_Load"
+			 Unloaded="Window_Closing">
+	<!--xmlns:cnclathecontrols="clr-namespace:CNC.Controls.Lathe;assembly=CNC.Controls.Lathe"
+	xmlns:cncprobingcontrols="clr-namespace:CNC.Controls.Probing;assembly=CNC.Controls.Probing"-->
+	
+	<UserControl.Resources>
+		<sys:String x:Key="MenuRotate">Rotate</sys:String>
+		<sys:String x:Key="MenuArcsToLines">Arcs to lines</sys:String>
+		<sys:String x:Key="MenuCompress">Compress (experimental)</sys:String>
+		<sys:String x:Key="MenuDragKnife">Add drag knife moves</sys:String>
+		<sys:String x:Key="JogStep">Jog step: {0}</sys:String>
+		<sys:String x:Key="RunTime">Run time: {0}</sys:String>
+		<cnccontrols:BlocksToStringConverter x:Key="BlocksToStringConverter" />
+		<cnccontrols:LogicalNotConverter x:Key="BooleanConverter" />
+	</UserControl.Resources>
+		
+	<UserControl.DataContext>
+		<cnccore:GrblViewModel/>
+	</UserControl.DataContext>
+
+	
+	<DockPanel IsEnabled="{Binding Path=IsMPGActive, Converter={StaticResource BooleanConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+		<Menu IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" DockPanel.Dock="Top" Background="#FFE5E5E5">
+			<MenuItem x:Name="menuFile" Header="_File">
+				<MenuItem Header="_Load" Click="fileOpenMenuItem_Click"/>
+				<MenuItem x:Name="menuSaveFile" Header="_Save" IsEnabled="false" Click="fileSaveMenuItem_Click"/>
+				<MenuItem x:Name="menuCloseFile" Header="_Close" IsEnabled="false" Click="fileCloseMenuItem_Click"/>
+				<!--<MenuItem x:Name="menuTransform" Header="_Transform" IsEnabled="false"
+				ItemsSource="{Binding Path=UIViewModel.TransformMenuItems, RelativeSource={RelativeSource AncestorType=Window}}"/>-->
+				<MenuItem x:Name="menuOpenConsole" Header="_Open Console" Click="openConsoleMenuItem_Click"/>
+				<MenuItem Header="_Exit" Click="exitMenuItem_Click"/>
+			</MenuItem>
+			<MenuItem x:Name="menuCamera" Header="_Camera">
+				<MenuItem Header="_Open" Click="CameraOpen_Click"/>
+			</MenuItem>
+			<MenuItem x:Name="menuHelp" Header="_Help">
+				<MenuItem Header="_Wiki" Click="aboutWikiItem_Click"/>
+				<MenuItem Header="Usage _tips" Click="tipsWikiItem_Click"/>
+				<MenuItem Header="A _brief tour" Click="briefTour_Click"/>
+				<MenuItem Header="_Video tutorials" Click="videoTutorials_Click"/>
+				<MenuItem Header="_Error and alarm codes" Click="errorAndAlarms_Click"/>
+				<MenuItem Header="_About" Click="aboutMenuItem_Click"/>
+			</MenuItem>
+		</Menu>
+		
+		
+			<!--<ToolBar IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Height="42" VerticalAlignment="Top"
+					 Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}}" >
+				<cnccontrols:FileActionControl IsEnabled="{Binding Path=IsToolChanging, Converter={StaticResource BooleanConverter}}"
+											   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+				<Separator Margin="4,0"></Separator>
+				<cnccontrols:MacroToolbarControl x:Name="toolbarMacros"/>
+			</ToolBar>-->
+		
+
+		<Border BorderBrush="#D1D5DA" BorderThickness="1" DockPanel.Dock="Top">
+			<Panel Margin="0,0,0,0" Height="40" Background="#F3F3F3">
+				<DockPanel>
+					<Button HorizontalAlignment="Left" Width="32" Height="32" Background="#00FFFFFF" Margin="0,0,0,0" >
+						<Image Source="/Assets/open.png" Width="24" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center" />
+					</Button>
+					<Button HorizontalAlignment="Left" Width="32" Height="32" Background="#00FFFFFF" Margin="0,0,0,0" >
+						<Image Source="/Assets/reload.png" Width="24" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center" />
+					</Button>
+					<Button HorizontalAlignment="Left" Width="32" Height="32" Background="#00FFFFFF" Margin="0,0,0,0" >
+						<Image Source="/Assets/edit.png" Width="24" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center" />
+					</Button>
+					<Button HorizontalAlignment="Left" Width="32" Height="32" Background="#00FFFFFF" Margin="0,0,0,0">
+						<Image Source="/Assets/close.png" Width="24" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					</Button>
+				</DockPanel>
+			</Panel>
+		</Border>
+		
+		
+		
+		
+		<Grid DockPanel.Dock="Bottom" ColumnDefinitions="auto,*,auto,auto" ShowGridLines="True"
+			  Height="30" VerticalAlignment="Bottom" Background="#F3F3F3">
+			<Border BorderBrush="Black" BorderThickness="1">
+			<TextBlock TextWrapping="NoWrap" Text="Blocks: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4" Grid.Column="0">
+				<!--<MultiBinding Converter="{StaticResource BlocksToStringConverter}">
+						<Binding Path="Blocks" />
+						<Binding Path="BlockExecuting" />
+					</MultiBinding>-->
+			</TextBlock>
+			</Border>
+			<!--<TextBlock x:Uid="lbl_message" Text="{Binding Path=Message}" TextWrapping="NoWrap"/>-->
+			<TextBlock Text="Homing cycle required..." TextWrapping="NoWrap" Grid.Column="1" Margin="4"/>
+			<!--<TextBlock x:Uid="lbl_runtime" Text="{Binding Path=RunTime, StringFormat={StaticResource RunTime}}" TextWrapping="NoWrap" Padding="2,0"/>-->
+			<TextBlock Text="Run time: " TextWrapping="NoWrap" Padding="2,0" Grid.Column="2" Margin="4"/>
+			<!--<TextBlock x:Uid="lbl_jogStep" ToolTip="Distance for keyboard step jog (with &lt;CTRL&gt; modifier)." Text="{Binding Path=JogStep, StringFormat={StaticResource JogStep}}" HorizontalAlignment="Right" TextWrapping="NoWrap" Margin="4,0"/>-->
+			<TextBlock Text="Jog step:" TextWrapping="NoWrap" Grid.Column="3" Margin="4"
+					   ToolTip.Tip="Distance for keyboard step jog (with &lt;CTRL&gt; modifier)."/>
+		</Grid>
+
+
+		<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top" Width="30" RenderTransform="rotate(90deg)">
+			<!--<StackPanel.Styles>
+				<Style Selector="Button">
+					<Setter Property="RenderTransform" Value="rotate(90deg)"/>
+					<Setter Property="MinWidth" Value="100"/>
+					<Setter Property="HorizontalAlignment" Value="Center"/>
+					<Setter Property="VerticalAlignment" Value="Center"/>
+					--><!--<Setter Property="Margin" Value="0,35,0,0"/>--><!--
+					<Style Selector="^:pressed">
+						<Setter Property="RenderTransform" Value="rotate(90deg) scale(0.98)"/>
+					</Style>
+				</Style>
+			</StackPanel.Styles>-->
+			<Button Content="Jog">
+				<Button.Flyout>
+					<Flyout Placement="LeftEdgeAlignedTop">
+						<cnccontrols:JogFlyoutControl x:Name="jogControl"/>
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+			<Button Content="Macros" />
+			<!--<Button Content="Goto" />-->
+			<!--<Button Content="Outline" />-->
+			<Button Content="MPos" />
+		</StackPanel>
+		
+		<!--<Canvas DockPanel.Dock="Right" Width="122" VerticalAlignment="Stretch" HorizontalAlignment="Right" ClipToBounds="False"
+				Panel.ZIndex="1" Margin="0,34,0,0">-->
+			<!--<ItemsControl x:Name="xx" Width="22" VerticalAlignment="Stretch">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}"
+									Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Width="22"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>-->
+			<!--<cnccontrols:JogFlyoutControl x:Name="jogControl" IsVisible="True" Canvas.Right="22"/>-->
+			<!--<cnccontrols:MacroExecuteControl x:Name="macroControl" IsVisible="False" Canvas.Right="22"/>-->
+			<!--<cnccontrols:GotoFlyoutControl x:Name="gotoControl" IsVisible="false" Canvas.Right="22"/>-->
+			<!--<cnccontrols:OutlineFlyout x:Name="outlineFlyout" IsVisible="False" Canvas.Right="22"/>-->
+			<!--<cnccontrols:MachinePositionFlyout x:Name="mposFlyout" IsVisible="Hidden" Canvas.Right="22"/>-->
+			<!--<cnccontrols:THCMonitorControl x:Name="thcControl" IsVisible="Hidden" Canvas.Right="22"/>-->
+		<!--</Canvas>-->
+		
+		<!--<TabControl Background="Transparent" DockPanel.Dock="Left" x:Name="tabMode" HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch" Focusable="False" SelectionChanged="TabMode_SelectionChanged">-->
+		<TabControl Background="LightBlue" DockPanel.Dock="Left" x:Name="tabMode" HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch" Focusable="False" SelectionChanged="TabMode_SelectionChanged">
+
+			
+			<!--<TabControl.Resources>
+				<Style TargetType="{x:Type TabItem}">
+					<Setter Property="Height" Value="32" />
+					<Setter Property="MinWidth" Value="40" />
+				</Style>
+			</TabControl.Resources>-->
+			
+			<TabControl.Styles>
+				<Style Selector="TabItem">
+					<Setter Property="MinHeight" Value="32"/>
+					<Setter Property="MinWidth" Value="40" />
+					<Setter Property="FontSize" Value="14"/>
+					<Setter Property="BorderThickness" Value="4"/>
+				</Style>
+			</TabControl.Styles>
+			
+			<!--<TabItem x:Uid="tab_grbl" x:Name="tabGrbl" Header="Grbl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+				<local:JobView x:Name="Grbl"/>
+			</TabItem>-->
+			<TabItem x:Name="tabGrbl" Header="Grbl" Margin="0">
+					<local:JobView x:Name="Grbl"/>
+			</TabItem>
+			
+			<!--<TabItem x:Uid="tab_3DView" x:Name="tabViewer" Header="3D View">
+				<cncviewer:Viewer x:Name="viewer"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabViewer" Header="3D View">
+				--><!--<cncviewer:Viewer x:Name="viewer"/>--><!--
+			</TabItem>-->
+
+			<!--<TabItem x:Uid="tab_probing" x:Name="tabProbing" Header="Probing">
+				<cncprobingcontrols:ProbingView x:Name="probingView"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabProbing" Header="Probing">
+				--><!--<cncprobingcontrols:ProbingView x:Name="probingView"/>--><!--
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_sdCard" x:Name="tabSDCard" Header="SD Card">
+				<cnccontrols:SDCardView x:Name="SDCardView" FileSelected="SDCardView_FileSelected"/>
+			</TabItem>--><!--
+			<TabItem x:Name="tabSDCard" Header="SD Card">
+				<cnccontrols:SDCardView x:Name="SDCardView" FileSelected="SDCardView_FileSelected"/>
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_turning" x:Name="tabTurning" Header="Turning">
+				<cnclathecontrols:TurningWizard x:Name="turningWizard"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabTurning" Header="Turning">
+				<cnclathecontrols:TurningWizard x:Name="turningWizard"/>
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_parting" x:Name="tabParting" Header="Parting">
+				<cnclathecontrols:PartingWizard x:Name="partingWizard"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabParting" Header="Parting">
+				<cnclathecontrols:PartingWizard x:Name="partingWizard"/>
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_facing" x:Name="tabFacing" Header="Facing">
+				<cnclathecontrols:FacingWizard x:Name="facingWizard"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabFacing" Header="Facing">
+				--><!--<cnclathecontrols:FacingWizard x:Name="facingWizard"/>--><!--
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_threading" x:Name="tabThreading" Header="Threading">
+				<cnclathecontrols:ThreadingWizard x:Name="threadingWizard"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabThreading" Header="Threading">
+				--><!--<cnclathecontrols:ThreadingWizard x:Name="threadingWizard"/>--><!--
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_offsets" x:Name="tabOffsets" Header="Offsets">
+				<cnccontrols:OffsetView x:Name="offsetControl"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabOffsets" Header="Offsets">
+				--><!--<cnccontrols:OffsetView x:Name="offsetControl"/>--><!--
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_tools" x:Name="tabTools" Header="Tools">
+				<cnccontrols:ToolView x:Name="toolControl"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabTools" Header="Tools">
+				--><!--<cnccontrols:ToolView x:Name="toolControl"/>--><!--
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_trinamic" x:Name="tabTrinamic" Header="Trinamic tuner">
+				<cnccontrols:TrinamicView x:Name="toolTrinamic"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabTrinamic" Header="Trinamic tuner">
+				--><!--<cnccontrols:TrinamicView x:Name="toolTrinamic"/>--><!--
+			</TabItem>-->
+			
+			<!--<TabItem x:Uid="tab_grblConfig" x:Name="tabConfig" Header="Settings: Grbl">
+				<cnccontrols:GrblConfigView x:Name="configControl"/>
+			</TabItem>-->
+			<TabItem x:Name="tabConfig" Header="Settings: Grbl">
+				<cnccontrols:GrblConfigView x:Name="configControl"/>
+			</TabItem>
+			
+			<!--<TabItem x:Uid="tab_appConfig" x:Name="tabAppConfig" Header="Settings: App">
+				<cnccontrols:AppConfigView x:Name="appConfigControl"/>
+			</TabItem>-->
+			<TabItem x:Name="tabAppConfig" Header="Settings: App">
+				<cnccontrols:AppConfigView x:Name="appConfigControl"/>
+			</TabItem>
+			
+			<!--<TabItem x:Uid="tab_pidTuner" x:Name="tabPIDTuner" Header="PID Tuner">
+				<cnccontrols:PIDLogView x:Name="toolPIDTuner"/>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabPIDTuner" Header="PID Tuner">
+				--><!--<cnccontrols:PIDLogView x:Name="toolPIDTuner"/>--><!--
+			</TabItem>-->
+			
+			<!--<TabItem x:Name="tabTurning" Header="Turning">
+				<Grid Background="#FFE5E5E5">
+					<cnc:TurningWizard x:Name="toolTurning" HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="875"/>
+				</Grid>
+			</TabItem>-->
+			<!--<TabItem x:Name="tabFacing" Header="Facing">
+				<Grid Background="#FFE5E5E5">
+					<WindowsFormsHost HorizontalAlignment="Left" Height="515" VerticalAlignment="Top" Width="875">
+						<cnc:FacingWizard x:Name="toolFacing" AutoScaleMode="Inherit"/>
+					</WindowsFormsHost>
+				</Grid>
+			</TabItem>-->
+			
+		</TabControl>
+		<!--<NumericUpDown ShowButtonSpinner="False" Value="{Binding DataCount}"></NumericUpDown>-->		
+		
+	</DockPanel>
+</UserControl>

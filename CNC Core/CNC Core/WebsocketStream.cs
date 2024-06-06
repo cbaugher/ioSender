@@ -39,8 +39,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Text;
-using System.Windows.Threading;
+//using System.Windows.Threading;
+using Avalonia.Threading;
+#if USEWEBSOCKET
 using WebSocketSharp;
+#endif
 
 namespace CNC.Core
 {
@@ -222,7 +225,8 @@ namespace CNC.Core
                         input.Remove(0, pos + 1);
                         state = Reply == "ok" ? Comms.State.ACK : (Reply.StartsWith("error") ? Comms.State.NAK : Comms.State.DataReceived);
                         if (Reply.Length != 0 && DataReceived != null)
-                            Dispatcher.Invoke(DataReceived, Reply);
+                            //Dispatcher.Invoke(DataReceived, Reply);
+                            Dispatcher.Invoke(() => DataReceived(Reply));  // Suspect...
                     }
                 }
                 else

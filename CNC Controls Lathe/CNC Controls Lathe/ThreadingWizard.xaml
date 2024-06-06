@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CNC.Controls.Lathe"
-             xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
+             xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls"
              xmlns:Converters="clr-namespace:CNC.Controls.Lathe"
              mc:Ignorable="d" 
              d:DesignHeight="515" d:DesignWidth="875"

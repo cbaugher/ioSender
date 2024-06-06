@@ -39,14 +39,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
+//using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Media;
+using Avalonia.VisualTree;
 using System.Globalization;
-using System.ComponentModel;
+//using System.ComponentModel;
 using CNC.Core;
+using FluentAvalonia.Core;
+using Avalonia.LogicalTree;
 
 namespace CNC.Controls
 {
@@ -85,14 +88,16 @@ namespace CNC.Controls
                             (AllowSign ? NumberStyles.AllowLeadingSign : NumberStyles.None);
         }
 
-        public static void OnFormatChanged(DependencyObject d, NumericProperties np, string format)
+        //public static void OnFormatChanged(DependencyObject d, NumericProperties np, string format)
+        public static void OnFormatChanged(AvaloniaObject d, NumericProperties np, string format)
         {
-            np.Parse(format);
+            //np.Parse(format);
 
-            Size size = UIUtils.MeasureText("".PadRight(np.Length, '9'), (Control)d);
+            //Size size = UIUtils.MeasureText("".PadRight(np.Length, '9'), (Control)d);
 
-            ((Control)d).Width = size.Width + (d is NumericTextBox ? 12 : 20);
-            //((NumericTextBox)sender).Width = TextRenderer.MeasureText("".PadRight(Length, '9'), ((NumericTextBox)sender).Font);
+            //((Control)d).Width = size.Width + (d is NumericTextBox ? 12 : 20);
+            ////AVALONIA  ((Control)d).Width = size.Width + (d is NumericUpDown ? 12 : 20);
+            ////((NumericTextBox)sender).Width = TextRenderer.MeasureText("".PadRight(Length, '9'), ((NumericTextBox)sender).Font);
         }
 
         public static bool IsStringNumeric(string value, NumericProperties np)
@@ -118,6 +123,7 @@ namespace CNC.Controls
         }
     }
 
+    /*
     public class StringRangeRule : ValidationRule
     {
         public double Min { get; set; } = double.NaN;
@@ -183,6 +189,7 @@ namespace CNC.Controls
             return ValidationResult.ValidResult;
         }
     }
+*/
 
     public class UIUtils
     {
@@ -197,26 +204,31 @@ namespace CNC.Controls
 
             public WaitCursor()
             {
-                _previousCursor = Mouse.OverrideCursor;
+                // FIXME
+                //_previousCursor = Mouse.OverrideCursor;
+                //_previousCursor = StandardCursorType.Wait;
 
-                Mouse.OverrideCursor = Cursors.Wait;
+                //Mouse.OverrideCursor = Cursors.Wait;
             }
 
             #region IDisposable Members
 
             public void Dispose()
             {
-                Mouse.OverrideCursor = _previousCursor;
+                //    Mouse.OverrideCursor = _previousCursor;
             }
 
             #endregion
         }
 
-        public static T TryFindParent<T>(DependencyObject current) where T : class
+        //public static T TryFindParent<T>(DependencyObject current) where T : class
+        public static T TryFindParent<T>(AvaloniaObject current) where T : class
         {
-            DependencyObject parent = VisualTreeHelper.GetParent(current);
+            //DependencyObject parent = VisualTreeHelper.GetParent(current);
+            AvaloniaObject? parent = ((Visual)current).GetVisualParent();
             if (parent == null)
-                parent = LogicalTreeHelper.GetParent(current);
+                //parent = LogicalTreeHelper.GetParent(current);
+                parent = ((ILogical)parent).GetLogicalParent() as AvaloniaObject;
 
             if (parent == null)
                 return null;
@@ -227,38 +239,46 @@ namespace CNC.Controls
                 return TryFindParent<T>(parent);
         }
 
-        public static IEnumerable<T> FindFirstLogicalChildren<T>(DependencyObject depObj) where T : DependencyObject
+        public static IEnumerable<T> FindFirstLogicalChildren<T>(AvaloniaObject depObj) where T : AvaloniaObject
+            //public static IEnumerable<T> FindFirstLogicalChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
             if (depObj != null)
             {
-                foreach (object rawChild in LogicalTreeHelper.GetChildren(depObj))
+                //foreach (object rawChild in LogicalTreeHelper.GetChildren(depObj))
+                foreach (object rawChild in ((ILogical)depObj).GetLogicalChildren())
                 {
-                    if (rawChild is DependencyObject)
+                    if (rawChild is AvaloniaObject)
+                    //if (rawChild is DependencyObject)
                     {
-                        DependencyObject child = (DependencyObject)rawChild;
+                        //DependencyObject child = (DependencyObject)rawChild;
+                        AvaloniaObject child = (AvaloniaObject)rawChild;
                         if (child is T)
                         {
                             yield return (T)child;
                         }
 
                         else foreach (T childOfChild in FindFirstLogicalChildren<T>(child))
-                        {
-                            yield return childOfChild;
-                        }
+                            {
+                                yield return childOfChild;
+                            }
                     }
                 }
             }
         }
 
-        public static IEnumerable<T> FindLogicalChildren<T>(DependencyObject depObj) where T : DependencyObject
+        //public static IEnumerable<T> FindLogicalChildren<T>(DependencyObject depObj) where T : DependencyObject
+        public static IEnumerable<T> FindLogicalChildren<T>(AvaloniaObject depObj) where T : AvaloniaObject
         {
             if (depObj != null)
             {
-                foreach (object rawChild in LogicalTreeHelper.GetChildren(depObj))
+                //foreach (object rawChild in LogicalTreeHelper.GetChildren(depObj))
+                foreach (object rawChild in ((ILogical)depObj).GetLogicalChildren())
                 {
-                    if (rawChild is DependencyObject)
+                    //if (rawChild is DependencyObject)
+                    if (rawChild is AvaloniaObject)
                     {
-                        DependencyObject child = (DependencyObject)rawChild;
+                        //DependencyObject child = (DependencyObject)rawChild;
+                        AvaloniaObject child = (AvaloniaObject)rawChild;
                         if (child is T)
                         {
                             yield return (T)child;
@@ -274,52 +294,66 @@ namespace CNC.Controls
         }
 
         // by WPFGermany - https://stackoverflow.com/questions/41132649/get-datagrids-scrollviewer
-        public static ScrollViewer GetScrollViewer(UIElement element)
+        public static ScrollViewer GetScrollViewer(Control element)
         {
             if (element == null) return null;
 
             ScrollViewer retour = null;
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element) && retour == null; i++)
+
+
+            //for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element) && retour == null; i++)
+            for (int i = 0; i < (element.GetVisualChildren()).Count() && retour == null; i++)
             {
-                if (VisualTreeHelper.GetChild(element, i) is ScrollViewer)
+
+                //if (VisualTreeHelper.GetChild(element, i) is ScrollViewer)
+                if (element.GetVisualChildren().ElementAt(i) is ScrollViewer)
                 {
-                    retour = (ScrollViewer)(VisualTreeHelper.GetChild(element, i));
+                    //retour = (ScrollViewer)(VisualTreeHelper.GetChild(element, i));
+                    retour = (ScrollViewer)element.GetVisualChildren().ElementAt(i);
                 }
                 else
                 {
-                    retour = GetScrollViewer(VisualTreeHelper.GetChild(element, i) as UIElement);
+                    //retour = GetScrollViewer(VisualTreeHelper.GetChild(element, i) as Control);
+                    retour = GetScrollViewer(element.GetVisualChildren().ElementAt(i) as Control);
                 }
             }
             return retour;
         }
 
         // By Todd McQuay, https://stackoverflow.com/questions/16342663/winforms-to-wpf-measure-text-widthgraphics-measurecharacterranges
-        public static Size MeasureText(string text,
-            FontFamily family, double size, FontStyle style, FontWeight weight, FontStretch stretch, TextFormattingMode formattingMode)
-        {
-            FormattedText formattedText = new FormattedText(
-                text,
-                CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                new Typeface(family, style, weight, stretch),
-                size,
-                Brushes.Black,
-                null,
-                formattingMode);
+        // REMOVE ME, SHOULD NOT BE NEEDED WITH AVALONIA??
+        //public static Size MeasureText(string text,
+        //    FontFamily family, double size, FontStyle style, FontWeight weight, FontStretch stretch)
+        //{
+        //    //REMOVEME    FormattedText formattedText = new FormattedText(
+        //    //    text,
+        //    //    CultureInfo.CurrentCulture,
+        //    //    FlowDirection.LeftToRight,
+        //    //    new Typeface(family, style, weight, stretch),
+        //    //    size,
+        //    //    Brushes.Black,
+        //    //    null,
+        //    //    formattingMode);
+        //    FormattedText formattedText = new FormattedText(
+        //        text,
+        //        CultureInfo.CurrentCulture,
+        //        FlowDirection.LeftToRight,
+        //        new Typeface(family, style, weight, stretch),
+        //        size,
+        //        Brushes.Black);
 
-            return new Size(formattedText.Width, formattedText.Height);
-        }
+        //    return new Size(formattedText.Width, formattedText.Height);
+        //}
 
-        public static Size MeasureText(string text, Control control)
-        {
-            return MeasureText(text, control.FontFamily, control.FontSize,
-                control.FontStyle, control.FontWeight, control.FontStretch,
-                TextOptions.GetTextFormattingMode(control));
-        }
-        // End byTodd McQuay
+        //public static Size MeasureText(string text, Control control)
+        //{
 
+        //    return MeasureText(text, control.FontFamily, control.FontSize, control.FontStyle, control.FontWeight, control.FontStretch, TextOptions.GetTextFormattingMode(control));
+        //}
+        //// End byTodd McQuay
 
 
+        //REMOVE ME, Can't use this in Avalonia??
         //public static void GroupBoxCaptionBold(GroupBox groupBox)
         //{
         //    foreach (Control c in groupBox.Controls)
@@ -330,58 +364,65 @@ namespace CNC.Controls
     }
 
     // By O. R. Mapper, https://stackoverflow.com/questions/10097417/how-do-i-create-an-autoscrolling-textbox
-    public static class TextBoxUtilities
-    {
-        public static readonly DependencyProperty AlwaysScrollToEndProperty = DependencyProperty.RegisterAttached("AlwaysScrollToEnd",
-                                                                                                                  typeof(bool),
-                                                                                                                  typeof(TextBoxUtilities),
-                                                                                                                  new PropertyMetadata(false, AlwaysScrollToEndChanged));
+    // REMOVE ME
+    // Check to see if this funciton is actually necessary with Avalonia
+//    public static class TextBoxUtilities
+//    {
+//        //public static readonly DependencyProperty AlwaysScrollToEndProperty = DependencyProperty.RegisterAttached("AlwaysScrollToEnd",
+//        //                                                                                                          typeof(bool),
+//        //                                                                                                          typeof(TextBoxUtilities),
+//        //                                                                                                          new PropertyMetadata(false, AlwaysScrollToEndChanged));
+//        public static readonly AvaloniaProperty AlwaysScrollToEndProperty = AvaloniaProperty.RegisterAttached("AlwaysScrollToEnd",
+//                                                                                                          typeof(bool),
+//                                                                                                          typeof(TextBoxUtilities),
+//                                                                                                          new PropertyMetadata(false, AlwaysScrollToEndChanged));
 
-        private static void AlwaysScrollToEndChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            if (tb != null)
-            {
-                bool alwaysScrollToEnd = (e.NewValue != null) && (bool)e.NewValue;
-                if (alwaysScrollToEnd)
-                {
-                    tb.ScrollToEnd();
-                    tb.TextChanged += TextChanged;
-                }
-                else
-                {
-                    tb.TextChanged -= TextChanged;
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("The attached AlwaysScrollToEnd property can only be applied to TextBox instances.");
-            }
-        }
+//        //private static void AlwaysScrollToEndChanged(object sender, DependencyPropertyChangedEventArgs e)
+//        private static void AlwaysScrollToEndChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+//        {
+//            TextBox? tb = sender as TextBox;
+//            if (tb != null)
+//            {
+//                bool alwaysScrollToEnd = (e.NewValue != null) && (bool)e.NewValue;
+//                if (alwaysScrollToEnd)
+//                {
+//                    tb.ScrollToEnd();
+//                    tb.TextChanged += TextChanged;
+//                }
+//                else
+//                {
+//                    tb.TextChanged -= TextChanged;
+//                }
+//            }
+//            else
+//            {
+//                throw new InvalidOperationException("The attached AlwaysScrollToEnd property can only be applied to TextBox instances.");
+//            }
+//        }
 
-        public static bool GetAlwaysScrollToEnd(TextBox textBox)
-        {
-            if (textBox == null)
-            {
-                throw new ArgumentNullException("textBox");
-            }
+//        public static bool GetAlwaysScrollToEnd(TextBox textBox)
+//        {
+//            if (textBox == null)
+//            {
+//                throw new ArgumentNullException("textBox");
+//            }
 
-            return (bool)textBox.GetValue(AlwaysScrollToEndProperty);
-        }
+//            return (bool)textBox.GetValue(AlwaysScrollToEndProperty);
+//        }
 
-        public static void SetAlwaysScrollToEnd(TextBox textBox, bool alwaysScrollToEnd)
-        {
-            if (textBox == null)
-            {
-                throw new ArgumentNullException("textBox");
-            }
+//        public static void SetAlwaysScrollToEnd(TextBox textBox, bool alwaysScrollToEnd)
+//        {
+//            if (textBox == null)
+//            {
+//                throw new ArgumentNullException("textBox");
+//            }
 
-            textBox.SetValue(AlwaysScrollToEndProperty, alwaysScrollToEnd);
-        }
+//            textBox.SetValue(AlwaysScrollToEndProperty, alwaysScrollToEnd);
+//        }
 
-        private static void TextChanged(object sender, TextChangedEventArgs e)
-        {
-            ((TextBox)sender).ScrollToEnd();
-        }
-    }
+//        private static void TextChanged(object sender, TextChangedEventArgs e)
+//        {
+//            ((TextBox)sender).ScrollToEnd();
+//        }
+//    }
 }

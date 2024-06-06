@@ -41,14 +41,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Windows;
-using System.Windows.Media.Media3D;
+//using System.Windows;
+//using System.Windows.Media.Media3D;
+using RP.Math;
 using System.Xml.Serialization;
 using CNC.Core;
 using System.Text;
 
 namespace CNC.GCode
 {
+
+    public struct PointD
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        
+        public PointD (double x, double y)
+        {
+            X = x;
+            Y = y;
+        }        
+    }
+
+    public struct Point3D
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+
+        public Point3D (double x, double y, double z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+
+    }
+
+
     public class GCodeParser : Machine
     {
         #region Helper classes, enums etc.
@@ -379,7 +409,8 @@ namespace CNC.GCode
             bool strip = state == CommandIgnoreState.Strip;
 
             if (!strip && state != CommandIgnoreState.No)
-                strip = MessageBox.Show(string.Format(LibStrings.FindResource("ParserStrip"), code), LibStrings.FindResource("ParserStripHdr"), MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+//                strip = MessageBox.Show(string.Format(LibStrings.FindResource("ParserStrip"), code), LibStrings.FindResource("ParserStripHdr"), MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+            strip = false;
 
             return strip;
         }
@@ -1179,8 +1210,9 @@ namespace CNC.GCode
                 Tool = gcValues.T;
                 Tokens.Add(new GCToolSelect(Commands.ToolSelect, gcValues.N, gcValues.T));
 
-                if (!quiet && ToolChanged != null && !ToolChanged(gcValues.T))
-                    MessageBox.Show(string.Format(LibStrings.FindResource("ParserToolProfile"), gcValues.T.ToString()), "GCode parser", MessageBoxButton.OK, MessageBoxImage.Warning);
+//                if (!quiet && ToolChanged != null && !ToolChanged(gcValues.T))
+//                      MessageBox.Show(string.Format(LibStrings.FindResource("ParserToolProfile"), gcValues.T.ToString()), "GCode parser", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    
             }
 
             if (modalGroups != ModalGroups.G1)
@@ -2651,7 +2683,7 @@ namespace CNC.GCode
             double sweep;
             int numPoints;
             List<Point3D> pts = new List<Point3D>();
-
+            
             // Calculate angles from center.
             double startAngle = GetStartAngle(plane, start, isRelative);
             double endAngle = GetEndAngle(plane, start, isRelative);
@@ -2706,7 +2738,7 @@ namespace CNC.GCode
         private List<Point3D> generatePointsAlongArcBDring(GCPlane plane, double[] start, double[] end, double startAngle, double sweep, int numPoints, double zIncrement, bool lastTurn)
         {
 
-            Point3D lineEnd = new Point3D();
+            //Point3D lineEnd = new Point3D();
             List<Point3D> segments = new List<Point3D>();
             double angle;
 
@@ -2723,22 +2755,23 @@ namespace CNC.GCode
                 start[plane.Axis0] = Math.Cos(angle) * r + center[0];
                 start[plane.Axis1] = Math.Sin(angle) * r + center[1];
 
-                lineEnd.X = start[0];
-                lineEnd.Y = start[1];
-                lineEnd.Z = start[2];
+                //lineEnd.X = start[0];
+                //lineEnd.Y = start[1];
+                //lineEnd.Z = start[2];
+                //Vector3 lineEnd = new Vector3(start[0], start[1], start[2]);
 
                 start[plane.AxisLinear] += zIncrement;
 
-                segments.Add(lineEnd);
+                segments.Add(new Point3D(start[0], start[1], start[2]));
             }
 
             if (lastTurn)
             {
-                lineEnd.X = end[0];
-                lineEnd.Y = end[1];
-                lineEnd.Z = end[2];
+                //lineEnd.X = end[0];
+                //lineEnd.Y = end[1];
+                //lineEnd.Z = end[2];
 
-                segments.Add(lineEnd);
+                segments.Add(new Point3D(end[0], end[1], end[2]));
             }
 
             return segments;
@@ -2747,11 +2780,12 @@ namespace CNC.GCode
 
     static public class GCSpline
     {
-        public static List<Point3D> GeneratePoints(double[] start, Point first, Point second, double[] end, double arcResolution, bool isRelative = false)
+        //public static List<Point3D> GeneratePoints(double[] start, Point first, Point second, double[] end, double arcResolution, bool isRelative = false)
+        public static List<Point3D> GeneratePoints(double[] start, PointD first, PointD second, double[] end, double arcResolution, bool isRelative = false)
         {
-            Point bez_target = new Point(start[0], start[1]);
+            PointD bez_target = new PointD(start[0], start[1]);
             List<Point3D> segments = new List<Point3D>();
-
+            
             double t = 0d, step = 0.1d;
 
             while (t < 1d)
@@ -2882,7 +2916,7 @@ namespace CNC.GCode
             GcodeBoundingBox bbox = new GcodeBoundingBox();
 
             List<Point3D> points = GeneratePoints(start, 0.01d, isRelative);
-
+            
             bbox.AddPoint(plane, start[0], start[1], Z);
 
             foreach (Point3D p in points)
@@ -2895,7 +2929,7 @@ namespace CNC.GCode
 
         public List<Point3D> GeneratePoints(double[] start, double arcResolution, bool isRelative = false)
         {
-            return GCSpline.GeneratePoints(start, new Point(start[0] + I, start[1] + J), new Point(X + P, Y + Q), Values, arcResolution);
+            return GCSpline.GeneratePoints(start, new PointD(start[0] + I, start[1] + J), new PointD(X + P, Y + Q), Values, arcResolution);
         }
     }
 
@@ -2928,7 +2962,7 @@ namespace CNC.GCode
             GcodeBoundingBox bbox = new GcodeBoundingBox();
 
             List<Point3D> points = GeneratePoints(start, 0.01d, isRelative);
-
+            
             bbox.AddPoint(plane, start[0], start[1], Z);
 
             foreach (Point3D p in points)
@@ -2941,8 +2975,8 @@ namespace CNC.GCode
 
         public List<Point3D> GeneratePoints(double[] start, double arcResolution, bool isRelative = false)
         {
-            Point first = new Point(start[0] + (I * 2d) / 3d, start[1] + (J * 2d) / 3d);
-            Point second = new Point(X + ((start[0] + I - X) *2d / 3d), Y + ((start[1] + J - Y) * 2d / 3d));
+            PointD first = new PointD(start[0] + (I * 2d) / 3d, start[1] + (J * 2d) / 3d);
+            PointD second = new PointD(X + ((start[0] + I - X) *2d / 3d), Y + ((start[1] + J - Y) * 2d / 3d));
 
             return GCSpline.GeneratePoints(start, first, second, Values, arcResolution);
         }

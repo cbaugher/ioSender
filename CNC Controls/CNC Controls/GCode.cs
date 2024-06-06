@@ -39,15 +39,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using CNC.Core;
 using CNC.GCode;
-using Microsoft.Win32;
+using Avalonia.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia;
+using Avalonia.Platform.Storage;
+using System.Threading.Tasks;
 
 namespace CNC.Controls
 {
@@ -75,10 +78,15 @@ namespace CNC.Controls
 
         public event GCodeJob.ToolChangedHandler ToolChanged = null;
 
+        public ObservableCollection<int> testCollection { get; set; }
+
         private GCode()
         {
             Program.FileChanged += Program_FileChanged;
             Program.ToolChanged += Program_ToolChanged;
+
+            testCollection = new ObservableCollection<int> { 3, 4, 7 };
+
         }
 
         private bool Program_ToolChanged(int toolNumber)
@@ -200,24 +208,26 @@ namespace CNC.Controls
         {
             bool allow = Model != null && GrblParserState.IsLoaded && (Model.StreamingState == StreamingState.Idle || Model.StreamingState == StreamingState.NoFile);
 
-            if (allow && e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-                allow = files.Count() == 1 && FileUtils.IsAllowedFile(files[0].ToLower(), FileTypes + (getConversionTypes() == string.Empty ? "" : "," + getConversionTypes()) + ",txt");
-            }
+            //FIXME    if (allow && e.Data.GetDataPresent(DataFormats.FileDrop))
+            //{
+            //    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            //    allow = files.Count() == 1 && FileUtils.IsAllowedFile(files[0].ToLower(), FileTypes + (getConversionTypes() == string.Empty ? "" : "," + getConversionTypes()) + ",txt");
+            //}
 
             e.Handled = true;
-            e.Effects = allow ? DragDropEffects.Copy : DragDropEffects.None;
+            //e.Effects = allow ? DragDropEffects.Copy : DragDropEffects.None;
+            e.DragEffects = allow ? DragDropEffects.Copy : DragDropEffects.Move;
+            
         }
 
         public void Drop(object sender, DragEventArgs e)
         {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            //string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
-            if (files.Count() == 1)
-            {
-                Load(files[0]);
-            }
+            //FIXME    if (files.Count() == 1)
+            //{
+            //    Load(files[0]);
+            //}
         }
 
         public void Close()
@@ -226,24 +236,42 @@ namespace CNC.Controls
             Model.Blocks = Blocks;
         }
 
-        public void Open()
+        public async Task OpenAsync(Visual? visual, string title)
         {
             string filename = string.Empty;
-            OpenFileDialog file = new OpenFileDialog();
-
             string conversionFilter = string.Empty; //conversionTypes == string.Empty ? string.Empty : string.Format("Other files ({0})|{0}|", FileUtils.ExtensionsToFilter(conversionTypes));
-
+            
             foreach (var converter in Converters)
                 conversionFilter += string.Format("{0} ({1})|{1}|", converter.FileType, FileUtils.ExtensionsToFilter(converter.FileExtensions));
 
-            file.Filter = string.Format("GCode files ({0})|{0}|{1}Text files (*.txt)|*.txt|All files (*.*)|*.*", FileUtils.ExtensionsToFilter(FileTypes), conversionFilter);
+            //FIXME  ADD CONVERTED TYPES TO FILTERS
+            //var filter = string.Format("GCode files ({0})|{0}|{1}", FileUtils.ExtensionsToFilter(FileTypes), conversionFilter);
 
-            if (file.ShowDialog() == true)
+            string[] filetypes = FileTypes.Split(',');
+
+            for (int i = 0; i < filetypes.Length; i++)
+                filetypes[i] = "*." + filetypes[i];
+
+            FilePickerFileType gcode_files = new("Gcode files")
             {
-                filename = file.FileName;
-            }
+                Patterns = filetypes
+            };
 
-            if(filename != string.Empty)
+
+            var tl = TopLevel.GetTopLevel(visual);
+
+            var file = await tl.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = title,
+                SuggestedStartLocation = await StorageProviderExtensions.TryGetFolderFromPathAsync(tl.StorageProvider, Core.Resources.Path),
+                FileTypeFilter = new[] { gcode_files, FilePickerFileTypes.TextPlain },
+                AllowMultiple = false,
+            });
+
+            if (file != null)
+                filename = file[0].Name.ToString();
+
+            if (filename != string.Empty)
                 Load(filename);
 
             Model.Blocks = Blocks;
@@ -275,37 +303,39 @@ namespace CNC.Controls
 
         public void Save()
         {
-            SaveFileDialog saveDialog = new SaveFileDialog()
-            {
-                Filter = "GCode file (*.nc)|*.nc",
-                AddExtension = true,
-                DefaultExt = ".nc",
-            };
+            
+            //SaveFileDialog saveDialog = new SaveFileDialog()
+            //{
+            //    Filter = "GCode file (*.nc)|*.nc",
+            //    AddExtension = true,
+            //    DefaultExt = ".nc",
+            //};
 
-            if (saveDialog.ShowDialog() == true)
-            {
-                try
-                {
-                    //using (new UIUtils.WaitCursor())
-                    //{
-                    //    GCodeParser.Save(saveDialog.FileName, GCodeParser.TokensToGCode(File.Tokens));
-                    //}
+            //if (saveDialog.ShowDialog() == true)
+            //{
+            //    try
+            //    {
+            //        //ORIG
+            //        //using (new UIUtils.WaitCursor())
+            //        //{
+            //        //    GCodeParser.Save(saveDialog.FileName, GCodeParser.TokensToGCode(File.Tokens));
+            //        //}
 
-                    using (StreamWriter stream = new StreamWriter(saveDialog.FileName))
-                    {
-                        using (new UIUtils.WaitCursor())
-                        {
-                            foreach (DataRow line in Program.Data.Rows)
-                                stream.WriteLine((string)line["Data"]);
-                        }
-                    }
-                }
-                catch (IOException)
-                {
-                }
+            //        //REMOVE using (StreamWriter stream = new StreamWriter(saveDialog.FileName))
+            //        using (StreamWriter stream = new StreamWriter(saveDialog.InitialFileName))
+            //        {
+            //            using (new UIUtils.WaitCursor())
+            //            {
+            //                foreach (DataRow line in Program.Data.Rows)
+            //                    stream.WriteLine((string)line["Data"]);
+            //            }
+            //        }
+            //    }
+            //    catch (IOException) { }
 
-                Model.FileName = saveDialog.FileName;
-            }
+            //    //REMOVE  Model.FileName = saveDialog.FileName;
+            //    Model.FileName = saveDialog.InitialFileName;
+            //}
         }
     }
 }

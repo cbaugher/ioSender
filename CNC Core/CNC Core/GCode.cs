@@ -40,7 +40,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using System.Windows.Media.Media3D;
 using CNC.Core;
 
 namespace CNC.GCode
@@ -484,9 +483,9 @@ namespace CNC.GCode
         }
 
         public double[] Array  { get { return new[] { X, Y, Z, A, B, C, U, V, W }; } }
-
+        
         public Point3D Point3D { get { return new Point3D(X, Y, Z); } }
-
+        
         public void Set (double[] values, AxisFlags axisFlags, bool relative = false)
         {
             if (relative)

@@ -38,11 +38,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System;
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia;
+using Avalonia.Controls;
 using CNC.Core;
-using System.Windows.Data;
+using Avalonia.Data;
+using Avalonia.Data.Core;
+using Avalonia.Layout;
+using Avalonia.Styling;
 using CNC.GCode;
+using System.ComponentModel.DataAnnotations;
 
 namespace CNC.Controls
 {
@@ -52,6 +56,7 @@ namespace CNC.Controls
         string _tv;
         double _nv;
 
+        
         public double NumericValue
         {
             get { return _nv; }
@@ -74,7 +79,8 @@ namespace CNC.Controls
         public string Format { get; private set; }
         public string Unit { get; private set; }
         public string Value { get; private set; }
-        public double Min { get; private set; } = double.NaN;
+        public double Min { get; 
+            private set; } = double.NaN;
         public double Max { get; private set; } = double.NaN;
         public bool AllowNull { get; private set; } = false;
 
@@ -114,7 +120,8 @@ namespace CNC.Controls
 
         public Label wLabel = null, wUnit = null;
         public TextBox wTextBox = null;
-        public NumericTextBox wNumericTextBox = null;
+        //public NumericTextBox wNumericTextBox = null;
+        public NumericUpDown wNumericTextBox = null;
         public CheckBox wCheckBox = null;
         public RadioButton wRadiobutton = null;
         private StackPanel Canvas;
@@ -231,35 +238,46 @@ namespace CNC.Controls
 
                 case GrblSettingDetails.DataTypes.INTEGER:
                 case GrblSettingDetails.DataTypes.FLOAT:
-                    wNumericTextBox = new NumericTextBox
+                    wNumericTextBox = new NumericUpDown
                     {
-                        Format = widget.Format,
-                        Height = 22
+                        //Format = widget.Format,
+                        FormatString = widget.Format,
+                        Height = 22,
+                        Width = 220
                     };
                     labelWidth = 210;
                     grid = labelGrid = AddGrid(wNumericTextBox.Width + 4);
                     grid.Children.Add(wNumericTextBox);
                     Grid.SetColumn(wNumericTextBox, 1);
                     components.Children.Add(grid);
-                    wNumericTextBox.TextChanged += wWidget_TextChanged;
+                    //wNumericTextBox.TextChanged += wWidget_TextChanged;
+                    wNumericTextBox.ValueChanged += wWidget_TextChanged;
                     wNumericTextBox.KeyDown += wWidget_KeyDown;
                     Binding binding = new Binding("Text")
                     {
                         Source = Canvas.DataContext,
-                        Path = new PropertyPath("NumericValue"),
+                        //Path = new PropertyPath("NumericValue"),
+                        Path = "NumericValue",
                         Mode = BindingMode.TwoWay,
-                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                        ValidatesOnDataErrors = true
+                        //ValidatesOnDataErrors = true
+                        
                     };
-                    binding.ValidationRules.Add(new NumericRangeRule()
-                    {
-                        Min = widget.Min,
-                        Max = widget.Max,
-                        AllowNull = widget.AllowNull
-                    });
-                    wNumericTextBox.Style = View.Resources["NumericErrorStyle"] as Style;
-                    BindingOperations.SetBinding(wNumericTextBox, NumericTextBox.ValueProperty, binding);
-//                    model.NumericValue = dbl.Parse(widget.Value);
+                    //binding.ValidationRules.Add(new NumericRangeRule()
+                    //{
+                    //    Min = widget.Min,
+                    //    Max = widget.Max,
+                    //    AllowNull = widget.AllowNull
+                    //});
+
+                    
+                    //wNumericTextBox.Style = View.Resources["NumericErrorStyle"] as Style;
+                    wNumericTextBox.Classes.Add("NumericErrorStyle");
+
+                    //BindingOperations.SetBinding(wNumericTextBox, NumericTextBox.ValueProperty, binding);
+                    wNumericTextBox.Bind(NumericUpDown.ValueProperty, binding);
+
+                    //ORIG   model.NumericValue = dbl.Parse(widget.Value);
+                    
                     break;
 
                 default:
@@ -270,14 +288,14 @@ namespace CNC.Controls
                         MaxLength = widget.Format.Length,
                         VerticalContentAlignment = VerticalAlignment.Bottom,
                         Height = 24
-                        //TabIndex = Canvas.Row
+                        //ORIG   TabIndex = Canvas.Row
                     };
                     if (widget.DataType == GrblSettingDetails.DataTypes.TEXT && widget.Format.StartsWith("x("))
                     {
                         int length = 8;
                         int.TryParse(widget.Format.Substring(2).Replace(")", ""), out length);
                         wTextBox.MaxLength = length;
-                        //  this.wTextBox.Size = new System.Drawing.Size(Math.Min(length * PPU, Canvas.Width - x - 15), 20);
+                        //ORIG  this.wTextBox.Size = new System.Drawing.Size(Math.Min(length * PPU, Canvas.Width - x - 15), 20);
                     }
                     else if (widget.DataType == GrblSettingDetails.DataTypes.IP4)
                     {
@@ -285,14 +303,17 @@ namespace CNC.Controls
                         Binding sbinding = new Binding("Text")
                         {
                             Source = Canvas.DataContext,
-                            Path = new PropertyPath("TextValue"),
+                            //Path = new PropertyPath("TextValue"),
+                            Path = "TextValue",
                             Mode = BindingMode.TwoWay,
-                            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                            ValidatesOnDataErrors = true
+                            //ValidatesOnDataErrors = true
                         };
-                        sbinding.ValidationRules.Add(new IP4ValueRule());
-                        wTextBox.Style = View.Resources["Ip4ErrorStyle"] as Style;
-                        BindingOperations.SetBinding(wTextBox, TextBox.TextProperty, sbinding);
+                        //sbinding.ValidationRules.Add(new IP4ValueRule());
+                        //wTextBox.Style = View.Resources["Ip4ErrorStyle"] as Style;
+                        wTextBox.Classes.Add("Ip4ErrorStyle");
+
+                        //BindingOperations.SetBinding(wTextBox, TextBox.TextProperty, sbinding);
+                        wTextBox.Bind(TextBox.TextProperty, sbinding);
                     }
                     if(widget.Min != double.NaN &&
                         (widget.DataType == GrblSettingDetails.DataTypes.TEXT || 
@@ -301,19 +322,21 @@ namespace CNC.Controls
                         Binding sbinding = new Binding("Text")
                         {
                             Source = Canvas.DataContext,
-                            Path = new PropertyPath("TextValue"),
+                            //Path = new PropertyPath("TextValue"),
+                            Path = "TextValue",
                             Mode = BindingMode.TwoWay,
-                            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                            ValidatesOnDataErrors = true
+                            //ValidatesOnDataErrors = true
                         };
-                        sbinding.ValidationRules.Add(new StringRangeRule()
-                        {
-                            Min = widget.Min,
-                            Max = widget.Max,
-                            AllowNull = widget.AllowNull
-                        });
-                        wTextBox.Style = View.Resources["StringErrorStyle"] as Style;
-                        BindingOperations.SetBinding(wTextBox, TextBox.TextProperty, sbinding);
+                        //sbinding.ValidationRules.Add(new StringRangeRule()
+                        //{
+                        //    Min = widget.Min,
+                        //    Max = widget.Max,
+                        //    AllowNull = widget.AllowNull
+                        //});
+                        //wTextBox.Style = View.Resources["StringErrorStyle"] as Style;
+                        wTextBox.Classes.Add("StringErrorStyle");
+                        //BindingOperations.SetBinding(wTextBox, TextBox.TextProperty, sbinding);
+                        wTextBox.Bind(TextBox.TextProperty, sbinding);
                     }
                     grid = labelGrid = AddGrid();
                     grid.Children.Add(wTextBox);
@@ -360,8 +383,8 @@ namespace CNC.Controls
 
         ~Widget()
         {
-            //   components.Children.Clear();
-            //   this.Dispose(false);
+            //components.Children.Clear();
+            //this.Dispose(false);
         }
 
         Grid AddGrid(double width)
@@ -527,9 +550,11 @@ namespace CNC.Controls
 
         #region UIEvents
 
-        private void wWidget_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        //private void wWidget_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void wWidget_KeyDown(object sender, Avalonia.Input.KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.Enter)
+            //if (e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key is Avalonia.Input.Key.Enter)
                 Assign();
         }
 
@@ -576,11 +601,11 @@ namespace CNC.Controls
             {
                 case GrblSettingDetails.DataTypes.INTEGER:
                 case GrblSettingDetails.DataTypes.FLOAT:
-                    ok = !Validation.GetHasError(wNumericTextBox);
+            //        ok = !Validation.GetHasError(wNumericTextBox);
                     break;
 
                 case GrblSettingDetails.DataTypes.IP4:
-                    ok = !Validation.GetHasError(wTextBox);
+            //        ok = !Validation.GetHasError(wTextBox);
                     break;
             }
 
@@ -607,8 +632,8 @@ namespace CNC.Controls
         {
             if (!disposed && disposing)
             {
-                //          this.components.Dispose();
-                //  this.Canvas.Controls.Remove(this);
+                //ORIG          this.components.Dispose();
+                //ORIG  this.Canvas.Controls.Remove(this);
             }
             disposed = true;
         }

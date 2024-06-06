@@ -1,0 +1,63 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignHeight="220" d:DesignWidth="315"
+			 xmlns:system="clr-namespace:System;assembly=mscorlib"
+			 xmlns:local="clr-namespace:CNC.Controls"
+    		 xmlns:sys="using:System"
+			 x:Class="CNC.Controls.MacroExecuteControl"
+             Loaded="macroExecuteControl_Loaded"
+			 x:DataType="local:MacroExecuteControl">
+
+	<UserControl.Resources>
+        <sys:String x:Key="MenuLabel">_Macros</sys:String>
+        <sys:String x:Key="RunMacro">Run {0} macro?</sys:String>
+		
+        <!--<Style x:Key="SmallXButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>-->
+    </UserControl.Resources>
+	<UserControl.Styles>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Grid Background="{TemplateBinding Background}">
+							<ContentPresenter HorizontalAlignment="Center"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</UserControl.Styles>
+	
+	
+
+	<Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Background="#FFE5E5EA">
+        <Grid Width="315" Height="220">
+            <ItemsControl ItemsSource="{Binding Path=Macros}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Width="140" Height="25" Focusable="False" Margin="5 3 0 0" Content="{Binding Path=Name}" Tag="{Binding Path=Id}"
+								VerticalAlignment="Top" Click="button_Click">
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Height="180" Width="300" Margin="0,5,0,0" Orientation="Vertical" ItemWidth="145" VerticalAlignment="Top" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <TextBlock Text="No macros defined, use Edit button to add." TextWrapping="Wrap"
+					   IsVisible="{Binding Path=IsMessageVisible}" HorizontalAlignment="Center"
+					   Margin="0,80,0,0" Width="290" VerticalAlignment="Top"/>
+            <Button Content="Edit" Padding="5,0" MinWidth="60" Height="25" HorizontalAlignment="Right" Margin="0,0,8,8" VerticalAlignment="Bottom" Click="button_Edit" />
+            <Button Content="×" Focusable="False" Classes="SmallXButtonStyle" VerticalContentAlignment="Top" HorizontalAlignment="Left" Margin="297,0,0,0"
+					VerticalAlignment="Top" Width="14" Height="18" Click="btn_Close"/>
+        </Grid>
+    </Border>
+
+</UserControl>

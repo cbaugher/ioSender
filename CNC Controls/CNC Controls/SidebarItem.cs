@@ -37,9 +37,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+//using System.Windows;
+using Avalonia;
+using Avalonia.Interactivity;
+//using System.Windows.Controls;
+using Avalonia.Controls;
+//using System.Windows.Media;
+using Avalonia.Media;
+using Avalonia.Styling;
+using Avalonia.Controls.Primitives;
 
 namespace CNC.Controls
 {
@@ -49,7 +55,7 @@ namespace CNC.Controls
         private UserControl view { get; }
         private static UserControl last = null;
 
-        public new Visibility Visibility { get { return view.Visibility; } set { view.Visibility = value; } }
+        public new bool IsVisible { get { return view.IsVisible;  } set { view.IsVisible = value; } }
         public new bool IsEnabled { get { return base.IsEnabled; } set { base.IsEnabled = value; } }
 
         public SidebarItem(ISidebarControl view) : base()
@@ -73,11 +79,13 @@ namespace CNC.Controls
 
             try
             {
-                Style = Application.Current.FindResource("btnSidebar") as Style;
+                // FIXME  ***Figure out styles in Avalonia***
+                //Style = Application.Current.FindResource("btnSidebar") as Style;
             }
             catch { }
 
-            LayoutTransform = new RotateTransform(90d);
+            //LayoutTransform = new RotateTransform(90d);
+            RenderTransform = new RotateTransform(90d);
 
             Click += button_Click;
         }
@@ -90,9 +98,9 @@ namespace CNC.Controls
         private void button_Click(object sender, RoutedEventArgs e)
         {
             if (last != null && last != view && last.IsVisible)
-                last.Visibility = Visibility.Hidden;
+                last.IsVisible = false;
 
-            view.Visibility = view.IsVisible ? Visibility.Hidden : Visibility.Visible;
+            view.IsVisible = view.IsVisible ? false : true;
             last = view;
         }
     }

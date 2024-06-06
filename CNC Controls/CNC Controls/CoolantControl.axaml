@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="CNC.Controls.CoolantControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+             
+			 mc:Ignorable="d"
+			 x:DataType="core:GrblViewModel"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+             xmlns:themes="using:GroupBox.Avalonia.ControlThemes">
+	
+	<!--<Design.PreviewWith>
+		<local:CoolantControl/>
+	</Design.PreviewWith>-->
+	
+    <!--<UserControl.Resources>
+        --><!--<local:BoolToVisibleConverter x:Key="IsVisibleConverter" />--><!--
+    </UserControl.Resources>-->
+	
+	<gb:GroupBox x:Name="grpCoolant" Header="Coolant" HorizontalAlignment="Left" VerticalAlignment="Top" Width="140" Theme="{StaticResource GroupBoxClassic}">
+        <StackPanel HorizontalAlignment="Left" Margin="3,3,0,0" Grid.Row="1" VerticalAlignment="Top">
+            <CheckBox x:Name="chkFlood" Tag="Flood" Content="Flood" IsChecked="{Binding Path=Flood, Mode=OneWay}" HorizontalAlignment="Left"
+					  Margin="10,3,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
+            <CheckBox x:Name="chkMist" Tag="Mist" Content="Mist" IsChecked="{Binding Path=Mist, Mode=OneWay}"  HorizontalAlignment="Left" Margin="10,3,0,0"
+					  VerticalAlignment="Top" Click="chkBox_Click"/>
+            <CheckBox x:Name="chkFan" Tag="Fan" Content="Fan" IsChecked="{Binding Path=Fan0, Mode=OneWay}"
+					  IsVisible="{Binding Path=HasFans, Mode=OneWay}" HorizontalAlignment="Left"
+					  Margin="10,3,0,0" VerticalAlignment="Top" Click="chkBox_Click"/>
+        </StackPanel>
+    </gb:GroupBox>
+
+</UserControl>

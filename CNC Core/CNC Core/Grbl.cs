@@ -46,15 +46,18 @@ using System.Globalization;
 using System.IO;
 using System.Data;
 using System.Diagnostics;
-using System.Windows.Media;
+//using System.Windows.Media;
+using Avalonia.Media;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
-using System.Windows.Threading;
-using System.Windows;
+using Avalonia.Threading;
+using Avalonia.Input.Platform;
+//using System.Windows.Threading;
+//using System.Windows;
 using CNC.GCode;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
+//using System.Collections.Concurrent;
+//using System.Threading.Tasks;
 
 namespace CNC.Core
 {
@@ -305,7 +308,7 @@ namespace CNC.Core
     }
 
     [Flags]
-    public enum Signals : int // Keep in sync with GrblInfo.SignalLetters constant below
+    public enum Signals : int // Keep in sync with GrblInfo.SignalLetters constant below ==> XYZABCUVWEPRDHSBTOMF
     {
         Off = 0,
         LimitX = 1 << 0,
@@ -344,7 +347,10 @@ namespace CNC.Core
         Down = 1 << 7,
         Up = 1 << 8
     }
+
+/********** MOVED TO GRBLVIEWMODEL ************/
     public struct GrblState
+//    public class GrblState
     {
         public GrblStates State;
         public int Substate;
@@ -353,6 +359,9 @@ namespace CNC.Core
         public Color Color;
         public bool MPG;
     }
+/***********************************************/
+
+
 
     public class Resources
     {
@@ -360,7 +369,8 @@ namespace CNC.Core
         public static string Locale { get; set; }
         public static string IniName { get; set; }
         public static string IniFile { get { return Path + IniName; } }
-        public static string DebugFile { get; set; } = string.Empty;
+        //public static string DebugFile { get; set; } = string.Empty;
+        public static string DebugFile { get; set; } = "debug.txt";
         public static string ConfigName { get; set; }
         public static bool IsLegacyController { get; set; } = false; // Set true if controller is legacy v1.1
 
@@ -1732,8 +1742,10 @@ namespace CNC.Core
             if (!GrblParserState.IsLoaded)
                 GrblParserState.Get(model);
 
-            dispatcher = Dispatcher.CurrentDispatcher;
+            //dispatcher = Dispatcher.CurrentDispatcher;
+            dispatcher = Dispatcher.UIThread;
             dataReceived += process;
+            //Dispatcher.UIThread.Invoke(process);
             LatheMode = GrblParserState.LatheMode;
 
             model.Silent = true;
@@ -1832,9 +1844,11 @@ namespace CNC.Core
 
         private static void process(string data)
         {
-            if (Dispatcher.CurrentDispatcher != dispatcher)
+            //if (Dispatcher.CurrentDispatcher != dispatcher)
+            if (Dispatcher.UIThread != dispatcher)
             {
-                dispatcher.Invoke(dataReceived, data);
+                //dispatcher.Invoke(dataReceived, data);
+                dispatcher.Invoke(() => dataReceived(data));
                 return;
             }
 
@@ -2766,11 +2780,16 @@ namespace CNC.Core
             return exp;
         }
 
+#if USE_ASYNC
+
+#else
         public static void CopyToClipboard()
+#endif
         {
             if (Settings.Count > 0) try
             {
-                Clipboard.SetText(string.Join("\r\n", Export().ToArray()));
+                    //Clipboard.SetText(string.Join("\r\n", Export().ToArray()));
+                    //Application.Current.Clipboard.SetTextAsync(string.Join("\r\n", Export().ToArray()));
             }
             catch
             {
@@ -2858,7 +2877,7 @@ namespace CNC.Core
                     {
                         Action<GrblSettingDetails> addMethod = Settings.Add;
                         setting = new GrblSettingDetails(id.ToString() + "|0||||||");
-                        Application.Current.Dispatcher.BeginInvoke(addMethod, setting);
+//                        Application.Current.Dispatcher.BeginInvoke(addMethod, setting);
                     }
 
                     setting.Value = valuepair[1];
@@ -2876,6 +2895,12 @@ namespace CNC.Core
 
         internal static bool suspend = false;
 
+
+        public void Cancel(CancellationTokenSource cts)
+        {
+            cts.Cancel();
+        }
+
         internal static void Suspend()
         {
             suspend = true;
@@ -2887,11 +2912,12 @@ namespace CNC.Core
             suspend = false;
         }
 
-        public void Run()
+        public void Run(object obj)
         {
             pollTimer = new System.Timers.Timer();
             pollTimer.Elapsed += new System.Timers.ElapsedEventHandler(pollTimer_Elapsed);
             //  this.pollTimer.SynchronizingObject = this;
+            ((CancellationToken)obj).ThrowIfCancellationRequested();
         }
 
         public bool IsEnabled { get { return pollTimer.Enabled; } }

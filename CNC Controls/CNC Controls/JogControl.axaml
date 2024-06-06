@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="CNC.Controls.JogControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 xmlns:ctrl="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 mc:Ignorable="d" d:DesignHeight="255"
+             x:DataType="core:GrblViewModel">
+	
+    <ctrl:GroupBox Header="Jogging" HorizontalAlignment="Left" VerticalAlignment="Top" Theme="{StaticResource GroupBoxClassic}">
+        <local:JogBaseControl x:Name="jogBase"/>
+    </ctrl:GroupBox>
+</UserControl>

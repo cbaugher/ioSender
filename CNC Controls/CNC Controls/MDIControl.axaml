@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="CNC.Controls.MDIControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
+             mc:Ignorable="d" d:DesignHeight="60" d:DesignWidth="450"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 xmlns:bh="using:TestAutoCompleteBehaviour.Behaviours"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:controls="using:CNC.Controls"
+			 x:DataType="cnccore:GrblViewModel">
+    <UserControl.Resources>
+        <local:LogicalNotConverter x:Key="BooleanConverter" />
+    </UserControl.Resources>
+	
+    <gb:GroupBox x:Name="grpMDI" IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource BooleanConverter}}" Header="MDI" Margin="0,0"
+				   HorizontalAlignment="Center" VerticalAlignment="Top" Theme="{StaticResource GroupBoxClassic}">
+        <StackPanel Orientation="Horizontal">
+			<AutoCompleteBox x:Name="txtMDI" ItemsSource="{Binding $parent[2].Commands, Mode=TwoWay}"
+							 SelectedItem=""
+							 Text="{Binding $parent[2].Command, Mode=TwoWay}" 
+							 HorizontalAlignment="Left" Height="32" Margin="3,0" VerticalAlignment="Center" Width="375" SelectionChanged="txtMDI_SelectionChanged"
+							 KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>
+
+            <!--<ComboBox x:Name="txtMDI" IsEditable="True" ItemsSource="{Binding Path=Commands, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
+					  SelectedItem="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
+					  Text="{Binding Path=Command, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" IsTextSearchEnabled="False"
+					  HorizontalAlignment="Left" Height="22" Margin="3,0" VerticalAlignment="Center" Width="375" SelectionChanged="txtMDI_SelectionChanged"
+					  KeyDown="txtMDI_KeyDown" Loaded="MDIControl_Loaded"/>-->
+            <Button Command="{Binding MDICommand}" CommandParameter="{Binding $parent[2].Command}" Content="Send"
+					Focusable="False" Grid.Column="1" HorizontalAlignment="Right" Margin="3,0" VerticalAlignment="Center" Width="55" Height="30" Click="Send_Click"/>
+        </StackPanel>
+    </gb:GroupBox>
+
+</UserControl>

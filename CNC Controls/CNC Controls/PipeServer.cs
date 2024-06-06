@@ -39,18 +39,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // https://www.c-sharpcorner.com/article/aborting-thread-vs-cancelling-task/
 
+using System;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 
 namespace CNC.Controls
 {
     public class PipeServer
     {
         public delegate void FileTransferHandler(string filename);
-        public static event FileTransferHandler FileTransfer;
+        //public static event FileTransferHandler FileTransfer;
+        public static Action<string> FileTransfer;
 
-        public PipeServer(System.Windows.Threading.Dispatcher dispatcher)
+        //public PipeServer(System.Windows.Threading.Dispatcher dispatcher)
+        public PipeServer(Avalonia.Threading.Dispatcher dispatcher)
         {
             Task server = null;
 
@@ -58,7 +62,8 @@ namespace CNC.Controls
                 server = Task.Factory.StartNew(() => RunServer(dispatcher));
         }
 
-        private static void RunServer(System.Windows.Threading.Dispatcher dispatcher)
+        //private static void RunServer(System.Windows.Threading.Dispatcher dispatcher)
+        private static void RunServer(Avalonia.Threading.Dispatcher dispatcher)
         {
             string filename; int c;
 
@@ -87,7 +92,10 @@ namespace CNC.Controls
                                         if (c >= ' ')
                                             filename += (char)c;
                                         else if (c == 10 && FileTransfer != null && File.Exists(filename))
-                                            dispatcher.Invoke(FileTransfer, filename);
+                                        {
+                                            //dispatcher.Invoke(FileTransfer, filename);
+                                            dispatcher.InvokeAsync(() => { FileTransfer(filename); });
+                                        }
                                     }
                                 }
                                 pipeServer.Disconnect();

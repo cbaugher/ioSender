@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IOSender", "IOSender\IOSender.csproj", "{53A1510C-ACCC-4C57-BA71-BF72A49B2E76}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC AppLaunch", "CNC AppLaunch\CNC AppLaunch\CNC AppLaunch.csproj", "{DBD03937-D494-49C2-BFA2-DC9A0D79167F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC Controls", "CNC Controls\CNC Controls\CNC Controls.csproj", "{0E1F79C6-AF96-43DA-B73A-B7373D66A245}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC Controls Camera", "CNC Controls Camera\CNC Controls Camera\CNC Controls Camera.csproj", "{1F422B3D-52F2-4C09-8B04-BB9D902CBD38}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC Controls Dragknife", "CNC Controls Dragknife\CNC Controls Dragknife.csproj", "{D3F2F2A4-FECE-4524-A2F2-8A9BB8035463}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC Controls Lathe", "CNC Controls Lathe\CNC Controls Lathe\CNC Controls Lathe.csproj", "{0EA65D03-A14E-4BBB-BC18-5A41F01D5E90}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC Controls Probing", "CNC Controls Probing\CNC Controls Probing\CNC Controls Probing.csproj", "{181A9A84-0555-4907-AE6E-0F2C4F04E374}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC Converters", "CNC Converters\CNC Converters.csproj", "{BD48EA71-19A1-49B3-9463-B18011DA5FCD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC Core", "CNC Core\CNC Core\CNC Core.csproj", "{7327BDC3-1333-481B-A564-C7B10657EDE9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC GCodeViewer", "CNC GCodeViewer\CNC GCodeViewer\CNC GCodeViewer.csproj", "{1089733F-78DB-4A91-943C-DC6F1347328A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53A1510C-ACCC-4C57-BA71-BF72A49B2E76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53A1510C-ACCC-4C57-BA71-BF72A49B2E76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53A1510C-ACCC-4C57-BA71-BF72A49B2E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53A1510C-ACCC-4C57-BA71-BF72A49B2E76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBD03937-D494-49C2-BFA2-DC9A0D79167F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD03937-D494-49C2-BFA2-DC9A0D79167F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD03937-D494-49C2-BFA2-DC9A0D79167F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E1F79C6-AF96-43DA-B73A-B7373D66A245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E1F79C6-AF96-43DA-B73A-B7373D66A245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E1F79C6-AF96-43DA-B73A-B7373D66A245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E1F79C6-AF96-43DA-B73A-B7373D66A245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F422B3D-52F2-4C09-8B04-BB9D902CBD38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F422B3D-52F2-4C09-8B04-BB9D902CBD38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F422B3D-52F2-4C09-8B04-BB9D902CBD38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3F2F2A4-FECE-4524-A2F2-8A9BB8035463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F2F2A4-FECE-4524-A2F2-8A9BB8035463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F2F2A4-FECE-4524-A2F2-8A9BB8035463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EA65D03-A14E-4BBB-BC18-5A41F01D5E90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EA65D03-A14E-4BBB-BC18-5A41F01D5E90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EA65D03-A14E-4BBB-BC18-5A41F01D5E90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{181A9A84-0555-4907-AE6E-0F2C4F04E374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{181A9A84-0555-4907-AE6E-0F2C4F04E374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{181A9A84-0555-4907-AE6E-0F2C4F04E374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD48EA71-19A1-49B3-9463-B18011DA5FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD48EA71-19A1-49B3-9463-B18011DA5FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD48EA71-19A1-49B3-9463-B18011DA5FCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7327BDC3-1333-481B-A564-C7B10657EDE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7327BDC3-1333-481B-A564-C7B10657EDE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7327BDC3-1333-481B-A564-C7B10657EDE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7327BDC3-1333-481B-A564-C7B10657EDE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1089733F-78DB-4A91-943C-DC6F1347328A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1089733F-78DB-4A91-943C-DC6F1347328A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1089733F-78DB-4A91-943C-DC6F1347328A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27D07700-1091-400C-A683-109E068DF36E}
+	EndGlobalSection
+EndGlobal

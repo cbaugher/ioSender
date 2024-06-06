@@ -40,7 +40,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media.Media3D;
+//using System.Windows.Media.Media3D;
 using CNC.GCode;
 
 namespace CNC.Core
@@ -63,7 +63,7 @@ namespace CNC.Core
         private bool translate;
         private RunAction action;
         private double retractPosition = double.NaN;
-
+                
         public GCodeEmulator(bool translate = false) : base()
         {
             this.translate = translate;

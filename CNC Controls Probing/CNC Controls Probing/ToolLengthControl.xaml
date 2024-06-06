@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:CNC.Controls.Probing"
-             xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
+             xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls"
              mc:Ignorable="d" Height="370"
              d:DesignHeight="370" d:DesignWidth="510">
     <UserControl.Resources>

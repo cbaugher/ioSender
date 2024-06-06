@@ -1,0 +1,185 @@
+﻿<UserControl x:Class="CNC.Controls.SignalsControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+             xmlns:gb="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 mc:Ignorable="d" d:DesignHeight="60" d:DesignWidth="216"
+			 x:DataType="core:GrblViewModel">
+
+	<UserControl.Resources>
+        <ResourceDictionary>
+			<local:IsSignalVisibleConverter x:Key="IsSignalVisibleConverter" />
+			<local:SignalToBooleanConverter x:Key="SignalToBooleanConverter"/>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<UserControl.Styles>
+		<StyleInclude Source="avares://CNC.Controls/Resources/SharedStyles.axaml"/>
+		<Style Selector="local|SignalControl">
+			<Setter Property="Width" Value="18"/>
+			<Setter Property="Height" Value="35"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="0"/>
+		</Style>
+		<Style Selector=":is(Control).DoorOpenVisibleStyle">
+			<Setter Property="IsVisible">
+				<Setter.Value>
+					<MultiBinding Converter="{StaticResource IsSignalVisibleConverter}">
+						<Binding Path="OptionalSignals" />
+						<Binding>
+							<Binding.Source>
+								<core:Signals>SafetyDoor</core:Signals>
+							</Binding.Source>
+						</Binding>
+					</MultiBinding>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style Selector=":is(Control).EStopVisibleStyle">
+			<Setter Property="IsVisible">
+				<Setter.Value>
+					<MultiBinding Converter="{StaticResource IsSignalVisibleConverter}">
+						<Binding Path="OptionalSignals" />
+						<Binding>
+							<Binding.Source>
+								<core:Signals>EStop</core:Signals>
+							</Binding.Source>
+						</Binding>
+					</MultiBinding>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style Selector=":is(Control).MotorWarningVisibleStyle">
+			<Setter Property="IsVisible">
+				<Setter.Value>
+					<MultiBinding Converter="{StaticResource IsSignalVisibleConverter}">
+						<Binding Path="OptionalSignals" />
+						<Binding>
+							<Binding.Source>
+								<core:Signals>MotorWarning</core:Signals>
+							</Binding.Source>
+						</Binding>
+					</MultiBinding>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style Selector=":is(Control).BlockDeleteVisibleStyle">
+			<Setter Property="IsVisible">
+				<Setter.Value>
+					<MultiBinding Converter="{StaticResource IsSignalVisibleConverter}">
+						<Binding Path="OptionalSignals" />
+						<Binding>
+							<Binding.Source>
+								<core:Signals>BlockDelete</core:Signals>
+							</Binding.Source>
+						</Binding>
+					</MultiBinding>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style Selector=":is(Control).OptionalStopVisibleStyle">
+			<Setter Property="IsVisible">
+				<Setter.Value>
+					<MultiBinding Converter="{StaticResource IsSignalVisibleConverter}">
+						<Binding Path="OptionalSignals"/>
+						<Binding>
+							<Binding.Source>
+								<core:Signals>OptionalStop</core:Signals>
+							</Binding.Source>
+						</Binding>
+					</MultiBinding>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style Selector="local|SignalControl_T.LimitX">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitX, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.LimitY">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitY, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.LimitZ">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitZ, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.LimitA">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitA, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.LimitB">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitB, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.LimitC">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitC, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.LimitU">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitU, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.LimitV">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitV, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.LimitW">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=LimitW, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.MotorWarning">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=MotorWarning, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.BlockDelete">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=BlockDelete, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.OptionalStop">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=OptionalStop, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.Hold">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=Hold, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.CycleStart">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=CycleStart, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.Reset">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=Reset, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.EStop">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=EStop, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.SafetyDoor">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=SafetyDoor, Mode=OneWay}"/>
+		</Style>
+		<Style Selector="local|SignalControl_T.Probe">
+			<Setter Property="IsSet" Value="{Binding Signals.Value, Converter={StaticResource SignalToBooleanConverter}, ConverterParameter=Probe, Mode=OneWay}"/>
+		</Style>
+		
+	</UserControl.Styles>					
+
+    <!--<ctrl:GroupBox x:Name="grpSignals" Header="Signals" HorizontalAlignment="Left" VerticalAlignment="Top" Height="60" Width="216" Theme="{StaticResource GroupBoxClassic}">-->
+    <gb:GroupBox x:Name="grpSignals" Header="Signals" HorizontalAlignment="Left" VerticalAlignment="Top" Height="60" Width="216" Theme="{StaticResource GroupBoxClassic}">
+	    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="36">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="3,0,0,0" VerticalAlignment="Center" DockPanel.Dock="Left">
+                <!--<local:SignalControl_T Label="A" IsSet="{Binding ResponseLogShowRTAll}"/>-->
+				<!--<TextBlock Text="{Binding Signals}" ToolTip.Tip="{Binding Signals1.Value}"/>-->
+				<local:SignalControl_T Label="X" Classes="LimitX"/>
+				<local:SignalControl_T Label="Y" Classes="YAxisVisibleStyle LimitY"/>
+                <local:SignalControl_T Label="Z" Classes="ZAxisVisibleStyle LimitZ"/>
+                <!--<local:SignalControl Label="{Binding Path=AxisLetter.A, Mode=OneWay}" IsSet="{Binding Path=Signals[(core:Signals)LimitA], Mode=OneWay}" Style="{StaticResource AAxisVisibleStyle}"/>
+                <local:SignalControl Label="{Binding Path=AxisLetter.B, Mode=OneWay}" IsSet="{Binding Path=Signals[(core:Signals)LimitB], Mode=OneWay}" Style="{StaticResource BAxisVisibleStyle}"/>
+                <local:SignalControl Label="{Binding Path=AxisLetter.C, Mode=OneWay}" IsSet="{Binding Path=Signals[(core:Signals)LimitC], Mode=OneWay}" Style="{StaticResource CAxisVisibleStyle}"/>-->
+                <local:SignalControl_T Label="U" Classes="UAxisVisibleStyle LimitU"/>
+                <local:SignalControl_T Label="V" Classes="VAxisVisibleStyle LimitV"/>
+                <local:SignalControl_T Label="W" Classes="WAxisVisibleStyle LimitW"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,3,0" VerticalAlignment="Center" DockPanel.Dock="Right">
+                <local:SignalControl_T Label="M" ToolTip.Tip="Motor warning" Classes="MotorWarningVisibleStyle MotorWarning"/>
+                <local:SignalControl_T Label="B" ToolTip.Tip="Block delete" Classes="BlockDeleteVisibleStyle BlockDelete"/>
+                <local:SignalControl_T Label="T" ToolTip.Tip="Optional stop" Classes="OptionalStopVisibleStyle OptionalStop"/>
+                <local:SignalControl_T Label="H" ToolTip.Tip="Feed hold" Classes="Hold"/>
+                <local:SignalControl_T Label="S" ToolTip.Tip="Cycle start" Classes="CycleStart"/>
+                <local:SignalControl_T Label="R" ToolTip.Tip="Reset" Classes="Reset"/>
+                <local:SignalControl_T Label="E" ToolTip.Tip="E-Stop" Classes="EStopVisibleStyle EStop"/>
+                <local:SignalControl_T Label="D" ToolTip.Tip="Safety door" Classes="DoorOpenVisibleStyle SafetyDoor"/>
+                <local:SignalControl_T Label="P" ToolTip.Tip="Probe" Classes="Probe"/>
+            </StackPanel>
+        </DockPanel>
+    </gb:GroupBox>
+</UserControl>

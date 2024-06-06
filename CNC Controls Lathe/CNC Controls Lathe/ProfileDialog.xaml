@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CNC.Controls.Lathe"
-        xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF" x:Class="CNC.Controls.Lathe.ProfileDialog"
+        xmlns:Controls="clr-namespace:CNC.Controls;assembly=CNC.Controls" x:Class="CNC.Controls.Lathe.ProfileDialog"
         xmlns:DialogConverters="clr-namespace:CNC.Controls.Lathe"
         mc:Ignorable="d"
         Title="Lathe Profile" Height="375" Width="430"

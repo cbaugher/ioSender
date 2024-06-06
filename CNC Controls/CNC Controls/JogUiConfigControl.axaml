@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="CNC.Controls.JogUiConfigControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+		     xmlns:ctrl="using:GroupBox.Avalonia.Controls"
+             xmlns:themes="using:GroupBox.Avalonia.Themes"
+             mc:Ignorable="d"
+			 x:DataType="local:Config">
+
+	<UserControl.Styles>
+		<Style Selector="Label">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="6,3,0,3"/>
+		</Style>
+		<Style Selector="Label.unit">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="80,0,0,0"/>
+		</Style>
+		<Style Selector="NumericUpDown">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="0,3,6,3"/>
+			<Setter Property="Width" Value="80"/>
+			<Setter Property="ShowButtonSpinner" Value="False"/>
+		</Style>
+	</UserControl.Styles>
+	
+	
+	<ctrl:GroupBox x:Name="grp_uiJog" Header="UI jogging" HorizontalAlignment="Left" VerticalAlignment="Top" Theme="{StaticResource GroupBoxClassic}">
+
+		<Grid HorizontalAlignment="Center" VerticalAlignment="Top" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+			  ColumnDefinitions="*,6,Auto" Width="">
+			<Label Target="distance3" Grid.Row="0" Grid.Column="0">Distance 3:</Label>
+			<Label Target="distance3" Grid.Row="0" Grid.Column="2" Classes="unit">mm</Label>
+			<NumericUpDown Name="fastFeedrate" Grid.Row="0" Grid.Column="2" Value="{Binding JogUiMetric.Distance3}"></NumericUpDown>
+			<Label Target="distance2" Grid.Row="1" Grid.Column="0">Distance 2:</Label>
+			<Label Target="distance2" Grid.Row="1" Grid.Column="2" Classes="unit">mm</Label>
+			<NumericUpDown Name="fastDistance" Grid.Row="1" Grid.Column="2" Value="{Binding JogUiMetric.Distance2}"></NumericUpDown>
+			<Label Target="distance1" Grid.Row="2" Grid.Column="0">Distance 1:</Label>
+			<Label Target="distance1" Grid.Row="2" Grid.Column="2" Classes="unit">mm</Label>
+			<NumericUpDown Name="slowFeedrate" Grid.Row="2" Grid.Column="2" Value="{Binding JogUiMetric.Distance1}"></NumericUpDown>
+			<Label Target="distance0" Grid.Row="3" Grid.Column="0">Distance 0:</Label>
+			<Label Target="distance0" Grid.Row="3" Grid.Column="2" Classes="unit">mm</Label>
+			<NumericUpDown Name="slowDistance" Grid.Row="3" Grid.Column="2" Value="{Binding JogUiMetric.Distance0}"></NumericUpDown>
+			<Label Target="feedrate3" Grid.Row="4" Grid.Column="0">Feedrate 3:</Label>
+			<Label Target="feedrate3" Grid.Row="4" Grid.Column="2" Classes="unit">mm/min</Label>
+			<NumericUpDown Name="feedrate3" Grid.Row="4" Grid.Column="2" Value="{Binding JogUiMetric.Feedrate3}"></NumericUpDown>
+			<Label Target="feedrate2" Grid.Row="5" Grid.Column="0">Feedrate 2:</Label>
+			<Label Target="feedrate2" Grid.Row="5" Grid.Column="2" Classes="unit">mm/min</Label>
+			<NumericUpDown Name="feedrate2" Grid.Row="5" Grid.Column="2" Value="{Binding JogUiMetric.Feedrate2}"></NumericUpDown>
+			<Label Target="feedrate1" Grid.Row="6" Grid.Column="0">Feedrate 1:</Label>
+			<Label Target="feedrate1" Grid.Row="6" Grid.Column="2" Classes="unit">mm/min</Label>
+			<NumericUpDown Name="feedrate1" Grid.Row="6" Grid.Column="2" Value="{Binding JogUiMetric.Feedrate1}"></NumericUpDown>
+			<Label Target="feedrate0" Grid.Row="7" Grid.Column="0">Feedrate 0:</Label>
+			<Label Target="feedrate0" Grid.Row="7" Grid.Column="2" Classes="unit">mm/min</Label>
+			<NumericUpDown Name="feedrate0" Grid.Row="7" Grid.Column="2" Value="{Binding JogUiMetric.Feedrate0}"></NumericUpDown>
+		</Grid>
+		
+	</ctrl:GroupBox>
+</UserControl>

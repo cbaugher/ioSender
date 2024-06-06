@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="CNC.Controls.LimitsControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
+             mc:Ignorable="d" d:DesignWidth="216"
+			 xmlns:ctrl="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 x:DataType="cnccore:GrblViewModel">
+
+
+	
+	<UserControl.Styles>
+		<StyleInclude Source="avares://CNC.Controls/Resources/SharedStyles.axaml"/>
+	</UserControl.Styles>
+	
+	<ctrl:GroupBox x:Name="grpLimits" Header="Program limits" HorizontalAlignment="Center" VerticalAlignment="Top" Width="216"
+				   Theme="{StaticResource GroupBoxClassic}">
+		<StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,5,0,5">
+			<local:LimitsBaseControl x:Name="axisX" Label="X"
+                MinValue="{Binding ProgramLimits.MinX, Mode=OneWay}"
+                MaxValue="{Binding ProgramLimits.MaxX, Mode=OneWay}"/>
+			<local:LimitsBaseControl x:Name="axisY" Label="Y" Classes="YAxisVisibleStyle"
+                MinValue="{Binding ProgramLimits.MinY, Mode=OneWay}"
+                MaxValue="{Binding ProgramLimits.MaxY, Mode=OneWay}"/>
+			<local:LimitsBaseControl x:Name="axisZ" Label="Z" Classes="ZAxisVisibleStyle"
+                MinValue="{Binding ProgramLimits.MinZ, Mode=OneWay}"
+                MaxValue="{Binding ProgramLimits.MaxZ, Mode=OneWay}"/>
+						
+			<local:LimitsBaseControl x:Name="axisA" Label="{Binding Path=AxisLetter.A, Mode=OneWay}" Classes="AAxisVisibleStyle"
+                MinValue="{Binding Path=ProgramLimits.MinA, Mode=OneWay}"
+                MaxValue="{Binding Path=ProgramLimits.MaxA, Mode=OneWay}"/>
+			<local:LimitsBaseControl x:Name="axisB" Label="{Binding Path=AxisLetter.B, Mode=OneWay}" Classes="BAxisVisibleStyle"
+                MinValue="{Binding Path=ProgramLimits.MinB, Mode=OneWay}"
+                MaxValue="{Binding Path=ProgramLimits.MaxB, Mode=OneWay}"/>
+			<local:LimitsBaseControl x:Name="axisC" Label="{Binding Path=AxisLetter.C, Mode=OneWay}" Classes="CAxisVisibleStyle"
+                MinValue="{Binding Path=ProgramLimits.MinC, Mode=OneWay}"
+                MaxValue="{Binding Path=ProgramLimits.MaxC, Mode=OneWay}"/>
+		</StackPanel>
+	</ctrl:GroupBox>
+</UserControl>

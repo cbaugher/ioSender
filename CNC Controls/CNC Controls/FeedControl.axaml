@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="CNC.Controls.FeedControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+			 xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+             mc:Ignorable="d"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 x:DataType="core:GrblViewModel">
+
+	<gb:GroupBox x:Name="grpFeedRate" Header="Feed rate" Theme="{StaticResource GroupBoxClassic}">
+
+		<!--<local:NumericTextBox x:Name="cvFeedRate" Value="{Binding Path=FeedRate, Mode=OneWay}" Format="####0" Background="#FFF8F8F8"
+									  HorizontalAlignment="Left" Margin="10,5,0,0" IsReadOnly="True" Focusable="False" VerticalAlignment="Top"
+									  Width="50"/>-->
+		<StackPanel Orientation="Vertical">
+			<DockPanel Background="AntiqueWhite">
+				<NumericUpDown x:Name="cvFeedRate" Value="{Binding FeedRate, Mode=OneWay}" FormatString="####0" Background="#FFF8F8F8"
+									  HorizontalAlignment="Left" Margin="0,0,0,0" IsReadOnly="True" Focusable="False" VerticalAlignment="Center"
+									  Width="50" ShowButtonSpinner="False"/>
+				<Label x:Name="lblFeedRrate" Content="{Binding FeedrateUnit, Mode=OneWay}" Margin="0,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+					   Background="Aqua"/>
+				<local:OverrideControl x:Name="feedOverrideControl" Value="{Binding Path=FeedOverride, Mode=OneWay}" HorizontalAlignment="Right"
+									   CommandGenerated="override_CommandGenerated" EncoderMode="FeedRate"/>
+			</DockPanel>
+
+			<DockPanel Background="Aquamarine">
+				<Label x:Name="lblRapids" Content="Rapids:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+				<local:OverrideControl x:Name="rapidsOverrideControl" Value="{Binding Path=RapidsOverride, Mode=OneWay}" HorizontalAlignment="Right"
+									   Background="Azure" CommandGenerated="override_CommandGenerated" EncoderMode="RapidRate" MinusOnly="True"/>
+			</DockPanel>
+		</StackPanel>
+	</gb:GroupBox>
+   
+</UserControl>

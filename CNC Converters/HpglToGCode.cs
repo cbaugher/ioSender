@@ -41,9 +41,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Media.Media3D;
+//using System.Windows;
+//using System.Windows.Media.Media3D;
 using CNC.Controls;
+using CNC.GCode;
 using CNC.Core;
 
 namespace CNC.Converters
@@ -190,8 +191,8 @@ namespace CNC.Converters
             settings.EnableToolSelection = true;
             settings.Profile = "HPGL" + (isCut ? "" : "Laser");
 
-            if (new JobParametersDialog(settings) { Owner = Application.Current.MainWindow }.ShowDialog() != true)
-                return false;
+            //if (new JobParametersDialog(settings) { Owner = Application.Current.MainWindow }.ShowDialog() != true)
+            //    return false;
 
             FileInfo file = new FileInfo(filename);
             StreamReader sr = file.OpenText();

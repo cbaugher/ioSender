@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:IOSender.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="925" d:DesignHeight="640" MinHeight="700" MinWidth="1020"
+		Background="#FFE5E5E5" Icon="/Assets/avalonia-logo.ico"
+		xmlns:cnccore="clr-namespace:CNC.Core;assembly=CNC.Core"
+        xmlns:cnccontrols="clr-namespace:CNC.Controls;assembly=CNC.Controls.WPF"
+        xmlns:local="clr-namespace:IOSender.Views;assembly=IOSender"
+		xmlns:views="clr-namespace:IOSender.Views;assembly=IOSender"
+        x:Class="IOSender.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        >
+    	<!--Loaded="Window_Load" Closing="Window_Closing" Closed="Window_Closed"-->
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<views:GrblView/>
+</Window>

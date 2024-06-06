@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="CNC.Controls.SpindleControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CNC.Controls"
+             xmlns:gcode="clr-namespace:CNC.GCode;assembly=CNC.Core"
+             xmlns:casp="using:CNC.Controls"
+             xmlns:core="clr-namespace:CNC.Core;assembly=CNC.Core"
+			 mc:Ignorable="d" Height="165"
+             x:Name="root"
+			 xmlns:gb="using:GroupBox.Avalonia.Controls"
+		     xmlns:themes="using:GroupBox.Avalonia.ControlThemes"
+			 x:DataType="core:GrblViewModel">
+	
+    <UserControl.Resources>
+        <local:LogicalNotConverter x:Key="LogicalNotConverter" />
+    </UserControl.Resources>	
+	
+        <gb:GroupBox x:Name="grpSpindle" Header="Spindle" Theme="{StaticResource GroupBoxClassic}">
+
+				<StackPanel Orientation="Vertical">
+					
+				    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                        <StackPanel x:DataType="local:SpindleControl" IsEnabled="{ReflectionBinding IsSpindleStateEnabled}" Orientation="Vertical" Margin="10,5,0,5">
+                            <RadioButton x:Name="rbSpindleOff" Content="Off" IsChecked="{ReflectionBinding SpindleState[Off], Mode=TwoWay}" HorizontalAlignment="Left"
+								         VerticalAlignment="Stretch" Click="rbSpindle_Click"/>
+                            <RadioButton x:Name="rbSpindleCW" Content="CW" IsChecked="{ReflectionBinding SpindleState[CW], Mode=TwoWay}" HorizontalAlignment="Left"
+								         VerticalAlignment="Stretch" Click="rbSpindle_Click"/>
+                            <RadioButton x:Name="rbSpindleCCW" Content="CCW" IsChecked="{ReflectionBinding SpindleState[CCW], Mode=TwoWay}" HorizontalAlignment="Left"
+								         VerticalAlignment="Stretch" Click="rbSpindle_Click"/>
+                        </StackPanel>
+					    <local:OverrideControl x:Name="overrideControl" Value="{Binding Path=RPMOverride, Mode=OneWay}" VerticalAlignment="Center"
+										       HorizontalAlignment="Left" EncoderMode="SpindleRPM" Margin="0,0,10,0"/>	
+				    </StackPanel>
+
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+						<Label x:Name="lblRPM" Content="RPM" HorizontalContentAlignment="Right" VerticalAlignment="Center" Width="40"/>
+						<!--<local:NumericTextBox x:Name="cvRPM" Value="{Binding Path=RPM, Mode=TwoWay}"
+										  IsEnabled="{Binding Path=IsJobRunning, Converter={StaticResource LogicalNotConverter}}" Format="####0" HorizontalAlignment="Left"
+										  Margin="2,0,0,0" TextWrapping="NoWrap" VerticalAlignment="Center"/>-->
+						<NumericUpDown x:Name="cvRPM" Value="{Binding RPM, Mode=TwoWay}" IsEnabled="{Binding IsJobRunning, Converter={StaticResource LogicalNotConverter}}"
+									   FormatString="####0" HorizontalAlignment="Left" Width="150" Margin="2,0,0,0"/>
+					</StackPanel>	
+				</StackPanel>
+        </gb:GroupBox>
+  
+
+</UserControl>
